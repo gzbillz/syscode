@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.seller.SellerAccountHisMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.seller.SellerAccountHis">
+		<id property="sahid" column="sahid" jdbcType="BIGINT" />
+		<result property="said" column="said" jdbcType="BIGINT" />
+		<result property="transtype" column="transtype" jdbcType="BOOLEAN" />
+		<result property="money" column="money" jdbcType="DOUBLE" />
+		<result property="bmoney" column="bmoney" jdbcType="DOUBLE" />
+		<result property="amoney" column="amoney" jdbcType="DOUBLE" />
+		<result property="remark" column="remark" jdbcType="VARCHAR" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sahid,said,transtype,money,remark,createtime,bmoney,amoney
+	</sql>
+	<sql id="Tb_table_name">tb_seller_account_his</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.said != null and bean.said != '' ">
+				and said = #{bean.said}
+			</if>
+			<if test="bean.transtype != null and bean.transtype != '' ">
+				and transtype = #{bean.transtype}
+			</if>
+			<if test="bean.money != null and bean.money != '' ">
+				and money = #{bean.money}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark = #{bean.remark}
+			</if> 
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.said != null and bean.said != '' ">
+				and said = #{bean.said}
+			</if>
+			<if test="bean.transtype != null and bean.transtype != '' ">
+				and transtype = #{bean.transtype}
+			</if>
+			<if test="bean.money != null and bean.money != '' ">
+				and money = #{bean.money}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark = #{bean.remark}
+			</if> 
+		</trim>
+		order by sahid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findPageCountBySaid" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.said != null and bean.said != '' ">
+				and said = #{bean.said}
+			</if>
+			<if test="bean.transtype != null and bean.transtype != '' ">
+				and transtype = #{bean.transtype}
+			</if> 
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark = #{bean.remark}
+			</if> 
+		</trim>
+	</select>
+	
+	<select id="findPageListBySaid" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.said != null and bean.said != '' ">
+				and said = #{bean.said}
+			</if>
+			<if test="bean.transtype != null and bean.transtype != '' ">
+				and transtype = #{bean.transtype}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark = #{bean.remark}
+			</if> 
+		</trim>
+		order by sahid desc
+		limit #{start},#{end}
+	</select>
+		
+	<select id="findBySahid" parameterType="Long" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where sahid = #{sahid}
+	</select>
+	
+	<delete id="delBySahid" parameterType="Long">
+		delete from <include refid="Tb_table_name" />
+		where sahid = #{sahid}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.seller.SellerAccountHis" useGeneratedKeys="true"
+		keyProperty="sahid">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sahid != null">
+				sahid,
+			</if>
+			<if test="said != null">
+				said,
+			</if>
+			<if test="transtype != null">
+				transtype,
+			</if>
+			<if test="money != null">
+				money,
+			</if>
+			<if test="bmoney != null">
+				bmoney,
+			</if>
+			<if test="amoney != null">
+				amoney,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+				createtime,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sahid != null">
+				#{sahid},
+			</if>
+			<if test="said != null">
+				#{said},
+			</if>
+			<if test="transtype != null">
+				#{transtype},
+			</if>
+			<if test="money != null">
+				#{money},
+			</if>
+			<if test="bmoney != null">
+				#{bmoney},
+			</if>
+			<if test="amoney != null">
+				#{amoney},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+				now(),
+		</trim>
+	</insert>
+	
+	<update id="updateBySahid" parameterType="com.billz.xycode.model.seller.SellerAccountHis">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="said != null ">
+					said = #{said},
+				</if>
+				<if test="transtype != null ">
+					transtype = #{transtype},
+				</if>
+				<if test="money != null ">
+					money = #{money},
+				</if>
+				<if test="bmoney != null ">
+					bmoney = #{bmoney},
+				</if>
+				<if test="amoney != null ">
+					amoney = #{amoney},
+				</if>
+				<if test="remark != null ">
+					remark = #{remark},
+				</if> 
+			</set>
+		</trim>
+		where sahid = #{sahid}
+	</update>
+</mapper>

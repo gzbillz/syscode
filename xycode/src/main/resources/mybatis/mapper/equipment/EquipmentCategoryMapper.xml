@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.equipment.EquipmentCategoryMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.equipment.EquipmentCategory">
+		<id property="cateid" column="cateid" jdbcType="INTEGER" />
+		<result property="catename" column="catename" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="sn" column="sn" jdbcType="INTEGER" />
+		<result property="icon" column="icon" jdbcType="VARCHAR" />
+		<result property="url" column="url" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		cateid,catename,status,sn,icon,url
+	</sql>
+	<sql id="Tb_table_name">tb_equipment_category</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.catename != null and bean.catename != '' ">
+				and catename = #{bean.catename}
+			</if>
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if>
+			<if test="bean.sn != null and bean.sn != '' ">
+				and sn = #{bean.sn}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.catename != null and bean.catename != '' ">
+				and catename = #{bean.catename}
+			</if>
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if>
+			<if test="bean.sn != null and bean.sn != '' ">
+				and sn = #{bean.sn}
+			</if>
+		</trim>
+		order by sn desc
+		limit #{start},#{end}
+	</select>
+	
+	<!-- 获取可用的设备分类 -->
+	<select id="findUseList" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+		where status=1
+		order by sn desc 
+	</select>
+	
+	<select id="findAllList" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+ 		order by sn desc 
+	</select>
+	
+	<select id="findByCateid" parameterType="Integer" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where cateid = #{cateid}
+	</select>
+	
+	<delete id="delByCateid" parameterType="Integer">
+		delete from <include refid="Tb_table_name" />
+		where cateid = #{cateid}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.equipment.EquipmentCategory" useGeneratedKeys="true"
+		keyProperty="cateid">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="cateid != null">
+				cateid,
+			</if>
+			<if test="catename != null">
+				catename,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="sn != null">
+				sn,
+			</if>
+			<if test="icon != null">
+				icon,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="cateid != null">
+				#{cateid},
+			</if>
+			<if test="catename != null">
+				#{catename},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="sn != null">
+				#{sn},
+			</if>
+			<if test="icon != null">
+				#{icon},
+			</if>
+			<if test="url != null">
+				#{url},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByCateid" parameterType="com.billz.xycode.model.equipment.EquipmentCategory">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="catename != null ">
+					catename = #{catename},
+				</if>
+				<if test="status != null ">
+					status = #{status},
+				</if>
+				<if test="sn != null ">
+					sn = #{sn},
+				</if>
+				<if test="icon != null ">
+					icon = #{icon},
+				</if>
+				<if test="url != null ">
+					url = #{url},
+				</if>
+			</set>
+		</trim>
+		where cateid = #{cateid}
+	</update>
+</mapper>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.project.ProjectSplitmoneyMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.project.ProjectSplitmoney">
+		<id property="id" column="id" jdbcType="BIGINT" />
+		<result property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="money" column="money" jdbcType="DOUBLE" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="remark" column="remark" jdbcType="VARCHAR" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="com.billz.xycode.model.project.ProjectSplitmoney">
+		<id property="id" column="id" jdbcType="BIGINT" />
+		<result property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="pname" column="pname" jdbcType="VARCHAR" />
+		<result property="money" column="money" jdbcType="DOUBLE" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+		<result property="catename" column="catename" jdbcType="VARCHAR" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="remark" column="remark" jdbcType="VARCHAR" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,sellerid,pid,money,cateid,posid,remark,createtime
+	</sql>
+	<sql id="Base_Column_List2">
+		vo.id,vo.sellerid,vo.pid,vo.money,vo.cateid,vo.posid,vo.remark,vo.createtime,
+		pr.pname,cate.catename
+	</sql>
+	<sql id="Tb_table_name">tb_project_splitmoney</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.pid != null and bean.pid != '' ">
+				and pid = #{bean.pid}
+			</if> 
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap2">
+		select
+			<include refid="Base_Column_List2" />
+		from <include refid="Tb_table_name" /> vo
+		left join tb_project pr on pr.pid=vo.pid
+		left join tb_equipment_category cate on cate.cateid=vo.cateid
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and vo.sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.pid != null and bean.pid != '' ">
+				and vo.pid = #{bean.pid}
+			</if> 
+		</trim>
+		order by vo.id desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findById" parameterType="Long" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where id = #{id}
+	</select>
+	
+	<delete id="delById" parameterType="Long">
+		delete from <include refid="Tb_table_name" />
+		where id = #{id}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.project.ProjectSplitmoney" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="sellerid != null">
+				sellerid,
+			</if>
+			<if test="pid != null">
+				pid,
+			</if>
+			<if test="money != null">
+				money,
+			</if>
+			<if test="cateid != null">
+				cateid,
+			</if>
+			<if test="posid != null">
+				posid,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+				createtime,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="sellerid != null">
+				#{sellerid},
+			</if>
+			<if test="pid != null">
+				#{pid},
+			</if>
+			<if test="money != null">
+				#{money},
+			</if>
+			<if test="cateid != null">
+				#{cateid},
+			</if>
+			<if test="posid != null">
+				#{posid},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+				now(),
+		</trim>
+	</insert>
+	
+	<update id="updateById" parameterType="com.billz.xycode.model.project.ProjectSplitmoney">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="sellerid != null ">
+					sellerid = #{sellerid},
+				</if>
+				<if test="pid != null ">
+					pid = #{pid},
+				</if>
+				<if test="money != null ">
+					money = #{money},
+				</if> 
+				<if test="cateid != null ">
+					cateid = #{cateid},
+				</if>
+				<if test="posid != null ">
+					posid = #{posid},
+				</if>
+				<if test="remark != null ">
+					remark = #{remark},
+				</if>
+			</set>
+		</trim>
+		where id = #{id}
+	</update>
+</mapper>

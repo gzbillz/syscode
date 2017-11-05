@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.order.OrderAccountPayMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.order.OrderAccountPay">
+		<id property="aoid" column="aoid" jdbcType="BIGINT" />
+		<result property="ordercode" column="ordercode" jdbcType="VARCHAR" />
+		<result property="othercode" column="othercode" jdbcType="VARCHAR" />
+		<result property="uaid" column="uaid" jdbcType="BIGINT" />
+		<result property="money" column="money" jdbcType="DOUBLE" />
+		<result property="fare" column="fare" jdbcType="DOUBLE" />
+		<result property="fuid" column="fuid" jdbcType="BIGINT" />
+		<result property="tuid" column="tuid" jdbcType="BIGINT" />
+		<result property="paytype" column="paytype" jdbcType="VARCHAR" />
+		<result property="apptype" column="apptype" jdbcType="VARCHAR" />
+		<result property="appversion" column="appversion" jdbcType="VARCHAR" />
+		<result property="paystatus" column="paystatus" jdbcType="INTEGER" />
+		<result property="paytime" column="paytime" jdbcType="TIMESTAMP" />
+		<result property="remark" column="remark" jdbcType="VARCHAR" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		aoid,ordercode,othercode,uaid,money,fare,fuid,tuid,paytype,apptype,appversion,paystatus,paytime,remark,createtime
+	</sql>
+	<sql id="Tb_table_name">tb_order_account_pay</sql>
+
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.ordercode != null and bean.ordercode != '' ">
+				and ordercode = #{bean.ordercode}
+			</if>
+			<if test="bean.othercode != null and bean.othercode != '' ">
+				and othercode = #{bean.othercode}
+			</if>
+			<if test="bean.uaid != null and bean.uaid != '' ">
+				and uaid = #{bean.uaid}
+			</if>
+			<if test="bean.fare != null and bean.fare != '' ">
+				and fare = #{bean.fare}
+			</if>
+			<if test="bean.fuid != null and bean.fuid != '' ">
+				and fuid = #{bean.fuid}
+			</if>
+			<if test="bean.tuid != null and bean.tuid != '' ">
+				and tuid = #{bean.tuid}
+			</if>
+			<if test="bean.paytype != null and bean.paytype != '' ">
+				and paytype = #{bean.paytype}
+			</if>
+			<if test="bean.apptype != null and bean.apptype != '' ">
+				and apptype = #{bean.apptype}
+			</if>
+			<if test="bean.paystatus != null and bean.paystatus != '' ">
+				and paystatus = #{bean.paystatus}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark = #{bean.remark}
+			</if>
+		</trim>
+	</select>
+
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.ordercode != null and bean.ordercode != '' ">
+				and ordercode = #{bean.ordercode}
+			</if>
+			<if test="bean.othercode != null and bean.othercode != '' ">
+				and othercode = #{bean.othercode}
+			</if>
+			<if test="bean.uaid != null and bean.uaid != '' ">
+				and uaid = #{bean.uaid}
+			</if>
+			<if test="bean.fare != null and bean.fare != '' ">
+				and fare = #{bean.fare}
+			</if>
+			<if test="bean.fuid != null and bean.fuid != '' ">
+				and fuid = #{bean.fuid}
+			</if>
+			<if test="bean.tuid != null and bean.tuid != '' ">
+				and tuid = #{bean.tuid}
+			</if>
+			<if test="bean.paytype != null and bean.paytype != '' ">
+				and paytype = #{bean.paytype}
+			</if>
+			<if test="bean.paystatus != null and bean.paystatus != '' ">
+				and paystatus = #{bean.paystatus}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark = #{bean.remark}
+			</if>
+		</trim>
+		order by aoid desc
+		limit #{start},#{end}
+	</select>
+
+	<select id="findByAoid" parameterType="Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		where aoid = #{aoid}
+	</select>
+	
+	<select id="findByOrdercode" parameterType="String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		where ordercode = #{ordercode}
+	</select>
+
+	<delete id="delByAoid" parameterType="Long">
+		delete from
+		<include refid="Tb_table_name" />
+		where aoid = #{aoid}
+	</delete>
+
+	<insert id="insert" parameterType="com.billz.xycode.model.order.OrderAccountPay"
+		useGeneratedKeys="true" keyProperty="aoid">
+		insert into
+		<include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="aoid != null">
+				aoid,
+			</if>
+			<if test="ordercode != null">
+				ordercode,
+			</if>
+			<if test="othercode != null">
+				othercode,
+			</if>
+			<if test="uaid != null">
+				uaid,
+			</if>
+			<if test="money != null">
+				money,
+			</if>
+			<if test="fare != null">
+				fare,
+			</if>
+			<if test="fuid != null">
+				fuid,
+			</if>
+			<if test="tuid != null">
+				tuid,
+			</if>
+			<if test="paytype != null">
+				paytype,
+			</if>
+			<if test="apptype != null">
+				apptype,
+			</if>
+			<if test="appversion != null">
+				appversion,
+			</if>
+			<if test="paystatus != null">
+				paystatus,
+			</if>
+			<if test="paytime != null">
+				paytime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+				createtime,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="aoid != null">
+				#{aoid},
+			</if>
+			<if test="ordercode != null">
+				#{ordercode},
+			</if>
+			<if test="othercode != null">
+				#{othercode},
+			</if>
+			<if test="uaid != null">
+				#{uaid},
+			</if>
+			<if test="money != null">
+				#{money},
+			</if>
+			<if test="fare != null">
+				#{fare},
+			</if>
+			<if test="fuid != null">
+				#{fuid},
+			</if>
+			<if test="tuid != null">
+				#{tuid},
+			</if>
+			<if test="paytype != null">
+				#{paytype},
+			</if>
+			<if test="apptype != null">
+				#{apptype},
+			</if>
+			<if test="appversion != null">
+				#{appversion},
+			</if>
+			<if test="paystatus != null">
+				#{paystatus},
+			</if>
+			<if test="paytime != null">
+				#{paytime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+				now(),
+		</trim>
+	</insert>
+
+	<update id="updateByAoid" parameterType="com.billz.xycode.model.order.OrderAccountPay">
+		update
+		<include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set>
+				<if test="ordercode != null ">
+					ordercode = #{ordercode},
+				</if>
+				<if test="othercode != null ">
+					othercode = #{othercode},
+				</if>
+				<if test="uaid != null ">
+					uaid = #{uaid},
+				</if>
+				<if test="money != null ">
+					money = #{money},
+				</if>
+				<if test="fare != null ">
+					fare = #{fare},
+				</if>
+				<if test="fuid != null ">
+					fuid = #{fuid},
+				</if>
+				<if test="tuid != null ">
+					tuid = #{tuid},
+				</if>
+				<if test="paytype != null ">
+					paytype = #{paytype},
+				</if>
+				<if test="apptype != null ">
+					apptype = #{apptype},
+				</if>
+				<if test="appversion != null ">
+					appversion = #{appversion},
+				</if>
+				<if test="paystatus != null ">
+					paystatus = #{paystatus},
+				</if>
+				<if test="paytime != null ">
+					paytime = #{paytime},
+				</if>
+				<if test="remark != null ">
+					remark = #{remark},
+				</if> 
+			</set>
+		</trim>
+		where aoid = #{aoid}
+	</update>
+	
+	<update id="updatePaySuccessByAoid" parameterType="map">
+		update
+			<include refid="Tb_table_name" />
+		set paystatus=1,paytime=now(),paytype=#{paytype}
+		<if test="othercode != null and othercode != '' ">
+		,othercode=#{othercode}		
+		</if>
+		where (paystatus=0 or paystatus is null) and aoid = #{aoid}
+	</update>
+	 
+</mapper>

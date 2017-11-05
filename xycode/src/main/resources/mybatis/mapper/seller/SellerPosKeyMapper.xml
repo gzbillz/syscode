@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.seller.SellerPosKeyMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.seller.SellerPosKey">
+		<id property="kid" column="kid" jdbcType="BIGINT" />
+		<result property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="dkey" column="dkey" jdbcType="VARCHAR" />
+		<result property="djkey" column="djkey" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="zyy" column="zyy" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="com.billz.xycode.model.seller.SellerPosKey">
+		<id property="kid" column="kid" jdbcType="BIGINT" />
+		<result property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="sellername" column="sellername" jdbcType="VARCHAR" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="pname" column="pname" jdbcType="VARCHAR" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+		<result property="catename" column="catename" jdbcType="VARCHAR" />
+		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+		<result property="subname" column="subname" jdbcType="VARCHAR" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="dkey" column="dkey" jdbcType="VARCHAR" />
+		<result property="djkey" column="djkey" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="zyy" column="zyy" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		kid,sellerid,pid,cateid,subcateid,posid,dkey,djkey,status,zyy
+	</sql>
+	<sql id="Base_Column_List2">
+		vo.kid,vo.sellerid,vo.pid,vo.cateid,vo.subcateid,vo.posid,vo.dkey,vo.djkey,vo.status,vo.zyy,
+		se.sellername,pr.pname,cate.catename,sub.subname
+	</sql>
+	<sql id="Tb_table_name">tb_seller_pos_key</sql>
+
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.pid != null and bean.pid != '' ">
+				and pid = #{bean.pid}
+			</if>
+			<if test="bean.cateid != null and bean.cateid != '' ">
+				and cateid = #{bean.cateid}
+			</if>
+			<if test="bean.subcateid != null and bean.subcateid != '' ">
+				and subcateid = #{bean.subcateid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if>
+			<if test="bean.status != null ">
+				and status = #{bean.status}
+			</if>
+			<if test="bean.zyy != null and bean.zyy != '' ">
+				and zyy = #{bean.zyy}
+			</if>
+		</trim>
+	</select>
+
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap2">
+		select
+			<include refid="Base_Column_List2" />
+		from
+		<include refid="Tb_table_name" /> vo
+		left join tb_seller se on se.sellerid=vo.sellerid
+		left join tb_project pr on pr.pid = vo.pid
+		left join tb_equipment_category cate on cate.cateid=vo.cateid
+		left join tb_equipment_subcategory sub on sub.subcateid=vo.subcateid
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and vo.sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.pid != null and bean.pid != '' ">
+				and vo.pid = #{bean.pid}
+			</if>
+			<if test="bean.cateid != null and bean.cateid != '' ">
+				and vo.cateid = #{bean.cateid}
+			</if>
+			<if test="bean.subcateid != null and bean.subcateid != '' ">
+				and vo.subcateid = #{bean.subcateid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and vo.posid = #{bean.posid}
+			</if>
+			<if test="bean.status != null ">
+				and vo.status = #{bean.status}
+			</if>
+			<if test="bean.zyy != null and bean.zyy != '' ">
+				and vo.zyy = #{bean.zyy}
+			</if>
+		</trim>
+		order by vo.kid desc
+		limit #{start},#{end}
+	</select>
+
+	<select id="findByKid" parameterType="Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		where kid = #{kid}
+	</select>
+
+	<select id="findKeyByPosid" parameterType="map" resultType="String">
+		select
+			dkey
+		from
+			<include refid="Tb_table_name" />
+		where STATUS=1 AND (
+			(zyy=5 AND posid = #{posid}) 
+			<choose>
+				<when test="subcateid != null">
+					OR (zyy=4 AND subcateid=#{subcateid} AND cateid=#{cateid} AND pid=#{pid} and sellerid=#{sellerid})
+					OR (zyy=3 AND cateid=#{cateid} AND pid=#{pid} and sellerid=#{sellerid})
+					OR (zyy=2 AND pid=#{pid} AND sellerid=#{sellerid})
+				</when>
+				<when test="cateid != null">
+					OR (zyy=3 AND cateid=#{cateid} AND pid=#{pid} and sellerid=#{sellerid})
+					OR (zyy=2 AND pid=#{pid} and sellerid=#{sellerid})
+				</when> 
+				<when test="pid != null">
+					OR (zyy=2 AND pid=#{pid} and sellerid=#{sellerid})
+				</when> 
+			</choose> 
+			OR (zyy=1 and sellerid=#{sellerid}) 
+		)
+		ORDER BY zyy DESC
+		LIMIT 1
+	</select>
+	
+	<select id="findDjKeyByPosid" parameterType="map" resultType="String">
+		select
+			djkey
+		from
+			<include refid="Tb_table_name" />
+		where STATUS=1 AND (
+			(zyy=5 AND posid = #{posid}) 
+			<choose>
+				<when test="subcateid != null">
+					OR (zyy=4 AND subcateid=#{subcateid} AND cateid=#{cateid} AND pid=#{pid} and sellerid=#{sellerid})
+					OR (zyy=3 AND cateid=#{cateid} AND pid=#{pid} and sellerid=#{sellerid})
+					OR (zyy=2 AND pid=#{pid} AND sellerid=#{sellerid})
+				</when>
+				<when test="cateid != null">
+					OR (zyy=3 AND cateid=#{cateid} AND pid=#{pid} and sellerid=#{sellerid})
+					OR (zyy=2 AND pid=#{pid} and sellerid=#{sellerid})
+				</when> 
+				<when test="pid != null">
+					OR (zyy=2 AND pid=#{pid} and sellerid=#{sellerid})
+				</when> 
+			</choose> 
+			OR (zyy=1 and sellerid=#{sellerid}) 
+		)
+		ORDER BY zyy DESC
+		LIMIT 1
+	</select>
+	
+	<delete id="delByKid" parameterType="Long">
+		delete from
+		<include refid="Tb_table_name" />
+		where kid = #{kid}
+	</delete>
+
+	<insert id="insert" parameterType="com.billz.xycode.model.seller.SellerPosKey"
+		useGeneratedKeys="true" keyProperty="kid">
+		insert into
+		<include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="kid != null">
+				kid,
+			</if>
+			<if test="sellerid != null">
+				sellerid,
+			</if>
+			<if test="pid != null">
+				pid,
+			</if>
+			<if test="cateid != null">
+				cateid,
+			</if>
+			<if test="subcateid != null">
+				subcateid,
+			</if>
+			<if test="posid != null">
+				posid,
+			</if>
+			<if test="dkey != null">
+				dkey,
+			</if>
+			<if test="djkey != null">
+				djkey,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="zyy != null">
+				zyy,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="kid != null">
+				#{kid},
+			</if>
+			<if test="sellerid != null">
+				#{sellerid},
+			</if>
+			<if test="pid != null">
+				#{pid},
+			</if>
+			<if test="cateid != null">
+				#{cateid},
+			</if>
+			<if test="subcateid != null">
+				#{subcateid},
+			</if>
+			<if test="posid != null">
+				#{posid},
+			</if>
+			<if test="dkey != null">
+				#{dkey},
+			</if>
+			<if test="djkey != null">
+				#{djkey},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="zyy != null">
+				#{zyy},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByKid" parameterType="com.billz.xycode.model.seller.SellerPosKey">
+		update
+		<include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set>
+				<if test="sellerid != null ">
+					sellerid = #{sellerid},
+				</if>
+				<if test="pid != null ">
+					pid = #{pid},
+				</if>
+				<if test="cateid != null ">
+					cateid = #{cateid},
+				</if>
+				<if test="subcateid != null ">
+					subcateid = #{subcateid},
+				</if>
+				<if test="posid != null ">
+					posid = #{posid},
+				</if>
+				<if test="dkey != null ">
+					dkey = #{dkey},
+				</if>
+				<if test="djkey != null ">
+					djkey = #{djkey},
+				</if>
+				<if test="status != null ">
+					status = #{status},
+				</if>
+				<if test="zyy != null ">
+					zyy = #{zyy},
+				</if>
+			</set>
+		</trim>
+		where kid = #{kid}
+	</update>
+</mapper>

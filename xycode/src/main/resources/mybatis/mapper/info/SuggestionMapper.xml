@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.info.SuggestionMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.info.Suggestion">
+		<id property="sugid" column="sugid" jdbcType="BIGINT" />
+		<result property="uid" column="uid" jdbcType="BIGINT" />
+		<result property="name" column="name" jdbcType="VARCHAR" />
+		<result property="phone" column="phone" jdbcType="VARCHAR" />
+		<result property="content" column="content" jdbcType="VARCHAR" />
+		<result property="renote" column="renote" jdbcType="VARCHAR" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sugid,uid,name,phone,content,renote,createtime
+	</sql>
+	<sql id="Tb_table_name">tb_suggestion</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.uid != null and bean.uid != '' ">
+				and uid = #{bean.uid}
+			</if>
+			<if test="bean.name != null and bean.name != '' ">
+				and name = #{bean.name}
+			</if>
+			<if test="bean.phone != null and bean.phone != '' ">
+				and phone = #{bean.phone}
+			</if>
+			<if test="bean.content != null and bean.content != '' ">
+				and content like '%${bean.content}%'
+			</if>
+			<if test="bean.renote != null and bean.renote != '' ">
+				and renote = #{bean.renote}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.uid != null and bean.uid != '' ">
+				and uid = #{bean.uid}
+			</if>
+			<if test="bean.name != null and bean.name != '' ">
+				and name = #{bean.name}
+			</if>
+			<if test="bean.phone != null and bean.phone != '' ">
+				and phone = #{bean.phone}
+			</if>
+			<if test="bean.content != null and bean.content != '' ">
+				and content like '%${bean.content}%'
+			</if>
+			<if test="bean.renote != null and bean.renote != '' ">
+				and renote = #{bean.renote}
+			</if>
+		</trim>
+		order by sugid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findBySugid" parameterType="Long" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where sugid = #{sugid}
+	</select>
+	
+	<delete id="delBySugid" parameterType="Long">
+		delete from <include refid="Tb_table_name" />
+		where sugid = #{sugid}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.info.Suggestion" useGeneratedKeys="true"
+		keyProperty="sugid">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sugid != null">
+				sugid,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="renote != null">
+				renote,
+			</if>
+				createtime,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sugid != null">
+				#{sugid},
+			</if>
+			<if test="uid != null">
+				#{uid},
+			</if>
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="phone != null">
+				#{phone},
+			</if>
+			<if test="content != null">
+				#{content},
+			</if>
+			<if test="renote != null">
+				#{renote},
+			</if>
+				now(),
+		</trim>
+	</insert>
+	
+	<update id="updateBySugid" parameterType="com.billz.xycode.model.info.Suggestion">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="uid != null ">
+					uid = #{uid},
+				</if>
+				<if test="name != null ">
+					name = #{name},
+				</if>
+				<if test="phone != null ">
+					phone = #{phone},
+				</if>
+				<if test="content != null ">
+					content = #{content},
+				</if>
+				<if test="renote != null ">
+					renote = #{renote},
+				</if> 
+			</set>
+		</trim>
+		where sugid = #{sugid}
+	</update>
+</mapper>

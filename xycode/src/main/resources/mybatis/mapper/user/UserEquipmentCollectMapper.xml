@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.user.UserEquipmentCollectMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.user.UserEquipmentCollect">
+		<id property="ucid" column="ucid" jdbcType="BIGINT" />
+		<result property="uid" column="uid" jdbcType="BIGINT" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+		<result property="eid" column="eid" jdbcType="BIGINT" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="ename" column="ename" jdbcType="VARCHAR" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="com.billz.xycode.model.user.UserEquipmentCollect">
+		<id property="ucid" column="ucid" jdbcType="BIGINT" />
+		<result property="uid" column="uid" jdbcType="BIGINT" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+		<result property="catename" column="catename" jdbcType="VARCHAR" />
+		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+		<result property="eid" column="eid" jdbcType="BIGINT" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="ename" column="ename" jdbcType="VARCHAR" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+ 	
+	<sql id="Base_Column_List">
+		ucid,uid,cateid,subcateid,posid,eid,logo,ename,createtime
+	</sql>
+	<sql id="Base_Column_List2">
+		vo.ucid,vo.uid,vo.cateid,vo.subcateid,vo.posid,vo.eid,vo.logo,vo.ename,vo.createtime
+	</sql>
+	<sql id="Tb_table_name">tb_user_equipment_collect</sql>
+
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.uid != null and bean.uid != '' ">
+				and uid = #{bean.uid}
+			</if>
+			<if test="bean.cateid != null and bean.cateid != '' ">
+				and cateid = #{bean.cateid}
+			</if>
+			<if test="bean.subcateid != null and bean.subcateid != '' ">
+				and subcateid = #{bean.subcateid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if>
+			<if test="bean.eid != null and bean.eid != '' ">
+				and eid = #{bean.eid}
+			</if>
+			<if test="bean.ename != null and bean.ename != '' ">
+				and ename = #{bean.ename}
+			</if>
+		</trim>
+	</select>
+
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.uid != null and bean.uid != '' ">
+				and uid = #{bean.uid}
+			</if>
+			<if test="bean.cateid != null and bean.cateid != '' ">
+				and cateid = #{bean.cateid}
+			</if>
+			<if test="bean.subcateid != null and bean.subcateid != '' ">
+				and subcateid = #{bean.subcateid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if>
+			<if test="bean.eid != null and bean.eid != '' ">
+				and eid = #{bean.eid}
+			</if>
+			<if test="bean.ename != null and bean.ename != '' ">
+				and ename = #{bean.ename}
+			</if>
+		</trim>
+		order by ucid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findPageCountByUid" parameterType="psb" resultType="Integer">
+		select count(1) from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.uid != null and bean.uid != '' ">
+				and uid = #{bean.uid}
+			</if> 
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if> 
+			<if test="bean.ename != null and bean.ename != '' ">
+				and ename = #{bean.ename}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findPageListByUid" parameterType="psb" resultMap="BaseResultMap2">
+		select
+			<include refid="Base_Column_List2" />,ct.catename
+		from <include refid="Tb_table_name" /> vo
+		left join tb_equipment_category ct on ct.cateid=vo.cateid
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.uid != null and bean.uid != '' ">
+				and vo.uid = #{bean.uid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and vo.posid = #{bean.posid}
+			</if> 
+			<if test="bean.ename != null and bean.ename != '' ">
+				and vo.ename = #{bean.ename}
+			</if>
+		</trim>
+		order by vo.ucid desc
+		limit #{start},#{end}
+	</select>
+
+	<select id="findTopNewByUid" parameterType="Long" resultType="map">
+		select
+			<include refid="Base_Column_List" />
+		from
+			<include refid="Tb_table_name" />
+		where uid = #{uid}
+		order by ucid desc
+		limit 1
+	</select>
+	
+	<select id="findByUcid" parameterType="Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		where ucid = #{ucid}
+	</select>
+
+	<delete id="delByUcid" parameterType="Long">
+		delete from
+		<include refid="Tb_table_name" />
+		where ucid = #{ucid}
+	</delete>
+	
+	<delete id="delByUcids" parameterType="String">
+		delete from
+		<include refid="Tb_table_name" />
+		where ucid in ('${ucids}')
+	</delete>
+
+	<insert id="insert" parameterType="com.billz.xycode.model.user.UserEquipmentCollect"
+		useGeneratedKeys="true" keyProperty="ucid">
+		insert into
+		<include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ucid != null">
+				ucid,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="cateid != null">
+				cateid,
+			</if>
+			<if test="subcateid != null">
+				subcateid,
+			</if>
+			<if test="posid != null">
+				posid,
+			</if>
+			<if test="eid != null">
+				eid,
+			</if>
+			<if test="logo != null">
+				logo,
+			</if>
+			<if test="ename != null">
+				ename,
+			</if> 
+				createtime,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ucid != null">
+				#{ucid},
+			</if>
+			<if test="uid != null">
+				#{uid},
+			</if>
+			<if test="cateid != null">
+				#{cateid},
+			</if>
+			<if test="subcateid != null">
+				#{subcateid},
+			</if>
+			<if test="posid != null">
+				#{posid},
+			</if>
+			<if test="eid != null">
+				#{eid},
+			</if>
+			<if test="logo != null">
+				#{logo},
+			</if>
+			<if test="ename != null">
+				#{ename},
+			</if>
+				now(),
+		</trim>
+	</insert>
+
+	<update id="updateByUcid" parameterType="com.billz.xycode.model.user.UserEquipmentCollect">
+		update
+		<include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set>
+				<if test="uid != null ">
+					uid = #{uid},
+				</if>
+				<if test="cateid != null ">
+					cateid = #{cateid},
+				</if>
+				<if test="subcateid != null ">
+					subcateid = #{subcateid},
+				</if>
+				<if test="posid != null ">
+					posid = #{posid},
+				</if>
+				<if test="eid != null ">
+					eid = #{eid},
+				</if>
+				<if test="ename != null ">
+					ename = #{ename},
+				</if>
+			</set>
+		</trim>
+		where ucid = #{ucid}
+	</update>
+</mapper>

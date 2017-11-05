@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.user.UserAccountMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.user.UserAccount">
+		<id property="uaid" column="uaid" jdbcType="BIGINT" />
+		<result property="uid" column="uid" jdbcType="BIGINT" />
+		<result property="balance" column="balance" jdbcType="DOUBLE" />
+		<result property="pwd" column="pwd" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.billz.xycode.model.user.UserAccount">
+		<id property="uaid" column="uaid" jdbcType="BIGINT" />
+		<result property="uid" column="uid" jdbcType="BIGINT" />
+		<result property="userid" column="userid" jdbcType="VARCHAR" />
+		<result property="balance" column="balance" jdbcType="DOUBLE" />
+		<result property="pwd" column="pwd" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		uaid,uid,balance,pwd,status
+	</sql>
+	<sql id="Base_Column_List2">
+		vo.uaid,vo.uid,vo.balance,vo.pwd,vo.status,user.userid
+	</sql>
+	<sql id="Tb_table_name">tb_user_account</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" /> vo
+		left join tb_user user on user.uid=vo.uid
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.uid != null and bean.uid != '' ">
+				and vo.uid = #{bean.uid}
+			</if>
+			<if test="bean.status != null ">
+				and vo.status = #{bean.status}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap2">
+		select
+			<include refid="Base_Column_List2" />
+		from <include refid="Tb_table_name" /> vo
+		left join tb_user user on user.uid=vo.uid
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.userid != null and bean.userid != '' ">
+				and user.userid = #{bean.userid}
+			</if>
+			<if test="bean.status != null">
+				and vo.status = #{bean.status}
+			</if>
+		</trim>
+		order by vo.uaid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findByUaid" parameterType="Long" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where uaid = #{uaid}
+	</select>
+	
+	<select id="findByUid" parameterType="Long" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where uid = #{uid}
+		order by uaid desc
+		limit 1
+	</select>
+	
+	<select id="findBalanceByUid" parameterType="Long" resultType="double">
+		select
+			balance
+		from 
+			<include refid="Tb_table_name" />
+		where uid = #{uid}
+		order by uaid desc
+		limit 1
+	</select>
+	
+	<select id="findUaidByUid" parameterType="Long" resultType="Long">
+		select
+			uaid
+		from 
+			<include refid="Tb_table_name" />
+		where uid = #{uid}
+		order by uaid desc
+		limit 1
+	</select>
+	
+	<delete id="delByUaid" parameterType="Long">
+		delete from <include refid="Tb_table_name" />
+		where uaid = #{uaid}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.user.UserAccount" useGeneratedKeys="true"
+		keyProperty="uaid">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="uaid != null">
+				uaid,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="balance != null">
+				balance,
+			</if>
+			<if test="pwd != null">
+				pwd,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="uaid != null">
+				#{uaid},
+			</if>
+			<if test="uid != null">
+				#{uid},
+			</if>
+			<if test="balance != null">
+				#{balance},
+			</if>
+			<if test="pwd != null">
+				#{pwd},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateBalanceByUaid" parameterType="map">
+		update <include refid="Tb_table_name" />
+		set balance=#{balance}
+		where uaid=#{uaid}
+	</update>
+	
+	<update id="updateByUaid" parameterType="com.billz.xycode.model.user.UserAccount">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="uid != null ">
+					uid = #{uid},
+				</if>
+				<if test="balance != null ">
+					balance = #{balance},
+				</if>
+				<if test="pwd != null ">
+					pwd = #{pwd},
+				</if>
+				<if test="status != null ">
+					status = #{status},
+				</if>
+			</set>
+		</trim>
+		where uaid = #{uaid}
+	</update>
+</mapper>

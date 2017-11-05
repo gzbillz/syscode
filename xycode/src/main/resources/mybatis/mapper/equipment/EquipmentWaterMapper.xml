@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.equipment.EquipmentWaterMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.equipment.EquipmentWater">
+		<id property="weid" column="weid" jdbcType="BIGINT" />
+		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="ename" column="ename" jdbcType="VARCHAR" />
+		<result property="usid" column="usid" jdbcType="BIGINT" />
+		<result property="usname" column="usname" jdbcType="VARCHAR" />
+		<result property="note" column="note" jdbcType="VARCHAR" />
+ 		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="usedate" column="usedate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.billz.xycode.model.equipment.EquipmentWater">
+		<id property="weid" column="weid" jdbcType="BIGINT" />
+		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+		<result property="subname" column="subname" jdbcType="VARCHAR" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="ename" column="ename" jdbcType="VARCHAR" />
+		<result property="usid" column="usid" jdbcType="BIGINT" />
+		<result property="usname" column="usname" jdbcType="VARCHAR" />
+		<result property="note" column="note" jdbcType="VARCHAR" />
+ 		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="usedate" column="usedate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		weid,subcateid,posid,ename,usid,usname,note,status,usedate
+	</sql>
+	<sql id="Base_Column_List2">
+		vo.weid,vo.subcateid,vo.posid,vo.ename,vo.usid,vo.usname,vo.note,vo.status,vo.usedate,
+		sub.subname
+	</sql>
+	<sql id="Tb_table_name">tb_equipment_water</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.subcateid != null and bean.subcateid != '' ">
+				and subcateid = #{bean.subcateid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if>
+			<if test="bean.ename != null and bean.ename != '' ">
+				and ename = #{bean.ename}
+			</if>
+			<if test="bean.usid != null and bean.usid != '' ">
+				and usid = #{bean.usid}
+			</if>
+			<if test="bean.note != null and bean.note != '' ">
+				and note = #{bean.note}
+			</if>
+			<if test="bean.status != null">
+				and status = #{bean.status}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap2">
+		select
+			<include refid="Base_Column_List2" />
+		from <include refid="Tb_table_name" /> vo
+		left join tb_equipment_subcategory sub on sub.subcateid=vo.subcateid
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.subcateid != null and bean.subcateid != '' ">
+				and vo.subcateid = #{bean.subcateid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and vo.posid = #{bean.posid}
+			</if>
+			<if test="bean.ename != null and bean.ename != '' ">
+				and vo.ename = #{bean.ename}
+			</if>
+			<if test="bean.usid != null and bean.usid != '' ">
+				and vo.usid = #{bean.usid}
+			</if>
+			<if test="bean.note != null and bean.note != '' ">
+				and vo.note = #{bean.note}
+			</if>
+			<if test="bean.status != null ">
+				and vo.status = #{bean.status}
+			</if>
+		</trim>
+		order by vo.weid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findTopNew" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where status=1
+		order by weid desc
+		limit 3
+	</select>
+	
+	<select id="findByWeid" parameterType="Long" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where weid = #{weid}
+	</select>
+	
+	<delete id="delByWeid" parameterType="Long">
+		delete from <include refid="Tb_table_name" />
+		where weid = #{weid}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.equipment.EquipmentWater" useGeneratedKeys="true"
+		keyProperty="weid">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="weid != null">
+				weid,
+			</if>
+			<if test="subcateid != null">
+				subcateid,
+			</if>
+			<if test="posid != null">
+				posid,
+			</if>
+			<if test="ename != null">
+				ename,
+			</if>
+			<if test="usid != null">
+				usid,
+			</if>
+			<if test="note != null">
+				note,
+			</if>
+			<if test="status != null">
+				status,
+			</if> 
+				usedate,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="weid != null">
+				#{weid},
+			</if>
+			<if test="subcateid != null">
+				#{subcateid},
+			</if>
+			<if test="posid != null">
+				#{posid},
+			</if>
+			<if test="ename != null">
+				#{ename},
+			</if>
+			<if test="usid != null">
+				#{usid},
+			</if>
+			<if test="note != null">
+				#{note},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+				now(),
+		</trim>
+	</insert>
+	
+	<update id="updateByWeid" parameterType="com.billz.xycode.model.equipment.EquipmentWater">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="subcateid != null ">
+					subcateid = #{subcateid},
+				</if>
+				<if test="posid != null ">
+					posid = #{posid},
+				</if>
+				<if test="ename != null ">
+					ename = #{ename},
+				</if>
+				<if test="usid != null ">
+					usid = #{usid},
+				</if>
+				<if test="note != null ">
+					note = #{note},
+				</if>
+				<if test="status != null ">
+					status = #{status},
+				</if> 
+			</set>
+		</trim>
+		where weid = #{weid}
+	</update>
+</mapper>

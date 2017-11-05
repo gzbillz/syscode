@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.project.ProjectMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.project.Project">
+		<id property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="pname" column="pname" jdbcType="VARCHAR" />
+		<result property="remark" column="remark" jdbcType="VARCHAR" />
+		<result property="address" column="address" jdbcType="VARCHAR" />
+		<result property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="sbms" column="sbms" jdbcType="VARCHAR" />
+		<result property="yysellerid" column="yysellerid" jdbcType="BIGINT" />
+		<result property="tzsellerid" column="tzsellerid" jdbcType="BIGINT" />
+		<result property="tgsellerid" column="tgsellerid" jdbcType="BIGINT" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="longitude" column="longitude" jdbcType="DOUBLE" />
+		<result property="latitude" column="latitude" jdbcType="DOUBLE" />
+		<result property="score" column="score" jdbcType="INTEGER" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="com.billz.xycode.model.project.Project">
+		<id property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="pname" column="pname" jdbcType="VARCHAR" />
+		<result property="remark" column="remark" jdbcType="VARCHAR" />
+		<result property="address" column="address" jdbcType="VARCHAR" />
+		<result property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="sellername" column="sellername" jdbcType="VARCHAR" />
+		<result property="sbms" column="sbms" jdbcType="VARCHAR" />
+		<result property="yysellerid" column="yysellerid" jdbcType="BIGINT" />
+		<result property="tzsellerid" column="tzsellerid" jdbcType="BIGINT" />
+		<result property="tgsellerid" column="tgsellerid" jdbcType="BIGINT" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+		<result property="longitude" column="longitude" jdbcType="DOUBLE" />
+		<result property="latitude" column="latitude" jdbcType="DOUBLE" />
+		<result property="score" column="score" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap3" type="com.billz.xycode.model.project.Project">
+		<id property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="pname" column="pname" jdbcType="VARCHAR" />
+		<result property="remark" column="remark" jdbcType="VARCHAR" />
+		<result property="address" column="address" jdbcType="VARCHAR" />
+		<result property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="sbms" column="sbms" jdbcType="VARCHAR" />
+		<result property="yysellerid" column="yysellerid" jdbcType="BIGINT" />
+		<result property="tzsellerid" column="tzsellerid" jdbcType="BIGINT" />
+		<result property="tgsellerid" column="tgsellerid" jdbcType="BIGINT" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+		<result property="longitude" column="longitude" jdbcType="DOUBLE" />
+		<result property="latitude" column="latitude" jdbcType="DOUBLE" />
+		<result property="distance" column="distance" jdbcType="DOUBLE" />
+		<result property="score" column="score" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		pid,logo,pname,remark,address,sellerid,sbms,yysellerid,tzsellerid,tgsellerid,status,createtime,
+		longitude,latitude,score
+	</sql>
+	<sql id="Base_Column_List2">
+		vo.pid,vo.logo,vo.pname,vo.remark,vo.address,vo.sellerid,vo.sbms,vo.yysellerid,
+		vo.tzsellerid,vo.tgsellerid,vo.status,vo.createtime,se.sellername,
+		vo.longitude,vo.latitude,vo.score
+	</sql>
+	<sql id="Tb_table_name">tb_project</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pname != null and bean.pname != '' ">
+				and pname like '%${bean.pname}%'
+			</if>
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and sellerid = #{bean.sellerid}
+			</if> 
+			<if test="bean.sbms != null and bean.sbms != '' ">
+				and sbms = #{bean.sbms}
+			</if>
+			<if test="bean.status != null ">
+				and status = #{bean.status}
+			</if> 
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap2">
+		select
+			<include refid="Base_Column_List2" />
+		from <include refid="Tb_table_name" /> vo
+		left join tb_seller se on se.sellerid=vo.sellerid
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pname != null and bean.pname != '' ">
+				and vo.pname like '%${bean.pname}%'
+			</if>
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and vo.sellerid = #{bean.sellerid}
+			</if> 
+			<if test="bean.sbms != null and bean.sbms != '' ">
+				and vo.sbms = #{bean.sbms}
+			</if>
+			<if test="bean.status != null ">
+				and vo.status = #{bean.status}
+			</if>
+		</trim>
+		order by vo.pid desc
+		limit #{start},#{end}
+	</select>
+	
+	<!-- start.坐标定位  -->
+	<select id="findDwPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pname != null and bean.pname != '' ">
+				and pname like '%${bean.pname}%'
+			</if>
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if> 
+		</trim>
+	</select>
+	
+	<select id="findDwPageList" parameterType="psb" resultMap="BaseResultMap3">
+		select
+			<include refid="Base_Column_List" />,
+			6378.138*2*ASIN(SQRT(POW(SIN((#{bean.latitude}*PI()/180-latitude*PI()/180)/2),2)+COS(#{bean.latitude}*PI()/180)*COS(latitude*PI()/180)* POW(SIN((#{bean.longitude}*PI()/180-longitude*PI()/180)/2),2))) AS distance
+		from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pname != null and bean.pname != '' ">
+				and pname like '%${bean.pname}%'
+			</if>
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if>
+		</trim>
+		order by distance
+		limit #{start},#{end}
+	</select>
+	
+	<!-- end.坐标定位 -->
+	
+	<select id="findPageListByYyseller" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pname != null and bean.pname != '' ">
+				and pname like '%${bean.pname}%'
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark = #{bean.remark}
+			</if>
+			<if test="bean.yysellerid != null and bean.yysellerid != '' ">
+				and yysellerid = #{bean.yysellerid}
+			</if> 
+			<if test="bean.sbms != null and bean.sbms != '' ">
+				and sbms = #{bean.sbms}
+			</if>
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if>
+		</trim>
+		order by pid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findPageCountByYyseller" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pname != null and bean.pname != '' ">
+				and pname like '%${bean.pname}%'
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark = #{bean.remark}
+			</if>
+			<if test="bean.yysellerid != null and bean.yysellerid != '' ">
+				and yysellerid = #{bean.yysellerid}
+			</if> 
+			<if test="bean.sbms != null and bean.sbms != '' ">
+				and sbms = #{bean.sbms}
+			</if>
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if>
+		</trim> 
+	</select>
+	
+	<select id="findByPid" parameterType="Long" resultMap="BaseResultMap2">
+		select
+			<include refid="Base_Column_List2" />
+		from 
+			<include refid="Tb_table_name" /> vo
+		left join tb_seller se on se.sellerid=vo.sellerid
+		where vo.pid = #{pid}
+	</select>
+	
+	<delete id="delByPid" parameterType="Long">
+		delete from <include refid="Tb_table_name" />
+		where pid = #{pid}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.project.Project" useGeneratedKeys="true"
+		keyProperty="pid">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="pid != null">
+				pid,
+			</if>
+			<if test="pname != null">
+				pname,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="sellerid != null">
+				sellerid,
+			</if>
+			<if test="sbms != null">
+				sbms,
+			</if>
+			<if test="yysellerid != null">
+				yysellerid,
+			</if>
+			<if test="tzsellerid != null">
+				tzsellerid,
+			</if>
+			<if test="tgsellerid != null">
+				tgsellerid,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="score != null">
+				score,
+			</if>  
+				createtime,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="pid != null">
+				#{pid},
+			</if>
+			<if test="pname != null">
+				#{pname},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="sellerid != null">
+				#{sellerid},
+			</if>
+			<if test="sbms != null">
+				#{sbms},
+			</if>
+			<if test="yysellerid != null">
+				#{yysellerid},
+			</if>
+			<if test="tzsellerid != null">
+				#{tzsellerid},
+			</if>
+			<if test="tgsellerid != null">
+				#{tgsellerid},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="score != null">
+				#{score},
+			</if>
+				now(),
+		</trim>
+	</insert>
+	
+	<update id="updateByPid" parameterType="com.billz.xycode.model.project.Project">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="pname != null ">
+					pname = #{pname},
+				</if>
+				<if test="remark != null ">
+					remark = #{remark},
+				</if>
+				<if test="sellerid != null ">
+					sellerid = #{sellerid},
+				</if>
+				<if test="sbms != null ">
+					sbms = #{sbms},
+				</if>
+				<if test="yysellerid != null ">
+					yysellerid = #{yysellerid},
+				</if>
+				<if test="tzsellerid != null ">
+					tzsellerid = #{tzsellerid},
+				</if>
+				<if test="tgsellerid != null ">
+					tgsellerid = #{tgsellerid},
+				</if>
+				<if test="score != null ">
+					score = #{score},
+				</if>
+				<if test="status != null ">
+					status = #{status},
+				</if> 
+			</set>
+		</trim>
+		where pid = #{pid}
+	</update>
+</mapper>

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.project.ProjectEquWaterMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.project.ProjectEquWater">
+		<id property="pewid" column="pewid" jdbcType="BIGINT" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+ 		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+		<result property="eid" column="eid" jdbcType="BIGINT" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="ename" column="ename" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="com.billz.xycode.model.project.ProjectEquWater">
+		<id property="pewid" column="pewid" jdbcType="BIGINT" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+		<result property="catename" column="catename" jdbcType="VARCHAR" />
+		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+		<result property="eid" column="eid" jdbcType="BIGINT" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="ename" column="ename" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap3" type="com.billz.xycode.model.project.ProjectEquWater">
+		<id property="pewid" column="pewid" jdbcType="BIGINT" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+		<result property="catename" column="catename" jdbcType="VARCHAR" />
+		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+		<result property="eid" column="eid" jdbcType="BIGINT" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="ename" column="ename" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="longitude" column="longitude" jdbcType="DOUBLE" />
+		<result property="latitude" column="latitude" jdbcType="DOUBLE" />
+		<result property="distance" column="distance" jdbcType="DOUBLE" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap4" type="com.billz.xycode.model.project.ProjectEquWater">
+		<id property="pewid" column="pewid" jdbcType="BIGINT" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="pname" column="pname" jdbcType="VARCHAR" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+ 		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+ 		<result property="subname" column="subname" jdbcType="VARCHAR" />
+		<result property="eid" column="eid" jdbcType="BIGINT" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="ename" column="ename" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="longitude" column="longitude" jdbcType="DOUBLE" />
+		<result property="latitude" column="latitude" jdbcType="DOUBLE" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		pewid,pid,cateid,subcateid,eid,logo,posid,status,ename
+	</sql>
+	<sql id="Base_Column_List2">
+		vo.pewid,vo.pid,vo.cateid,vo.subcateid,vo.eid,vo.logo,vo.posid,vo.status,vo.ename
+	</sql>
+	<sql id="Base_Column_List3">
+		vo.pewid,vo.pid,vo.cateid,vo.subcateid,vo.eid,vo.logo,vo.posid,vo.status,vo.ename,
+		vo.longitude,vo.latitude
+	</sql>
+	<sql id="Base_Column_List4">
+		vo.pewid,vo.pid,vo.cateid,vo.subcateid,vo.eid,vo.logo,vo.posid,vo.status,vo.ename,
+		vo.longitude,vo.latitude,pr.pname,sub.subname
+	</sql>
+	<sql id="Tb_table_name">tb_project_equ_water</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pid != null and bean.pid != '' ">
+				and pid = #{bean.pid}
+			</if>
+			<if test="bean.eid != null and bean.eid != '' ">
+				and eid = #{bean.eid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if>
+			<if test="bean.status != null ">
+				and status = #{bean.status}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap4">
+		select
+			<include refid="Base_Column_List4" />
+		from <include refid="Tb_table_name" /> vo
+		left join tb_project pr on pr.pid=vo.pid
+		left join tb_equipment_subcategory sub on sub.subcateid=vo.subcateid
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pid != null and bean.pid != '' ">
+				and pid = #{bean.pid}
+			</if>
+			<if test="bean.eid != null and bean.eid != '' ">
+				and eid = #{bean.eid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if>
+			<if test="bean.status != null ">
+				and status = #{bean.status}
+			</if>
+		</trim>
+		order by pewid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findDwPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pid != null and bean.pid != '' ">
+				and pid = #{bean.pid}
+			</if> 
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if> 
+				and status = 1
+		</trim>
+	</select>
+	
+	<select id="findDwPageList" parameterType="psb" resultMap="BaseResultMap3">
+		select
+			<include refid="Base_Column_List3" />,ct.catename,
+			6378.138*2*ASIN(SQRT(POW(SIN((#{bean.latitude}*PI()/180-vo.latitude*PI()/180)/2),2)+COS(#{bean.latitude}*PI()/180)*COS(vo.latitude*PI()/180)* POW(SIN((#{bean.longitude}*PI()/180-vo.longitude*PI()/180)/2),2))) AS distance
+		from <include refid="Tb_table_name" /> vo
+		left join tb_equipment_category ct on ct.cateid=vo.cateid
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pid != null and bean.pid != '' ">
+				and vo.pid = #{bean.pid}
+			</if> 
+			<if test="bean.posid != null and bean.posid != '' ">
+				and vo.posid = #{bean.posid}
+			</if>
+				and vo.status = 1
+		</trim>
+		order by distance desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findPageCountByPid" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pid != null and bean.pid != '' ">
+				and pid = #{bean.pid}
+			</if> 
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if> 
+				and status = 1
+		</trim>
+	</select>
+	
+	<select id="findPageListByPid" parameterType="psb" resultMap="BaseResultMap2">
+		select
+			<include refid="Base_Column_List2" />,ct.catename
+ 		from <include refid="Tb_table_name" /> vo
+		left join tb_equipment_category ct on ct.cateid=vo.cateid
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pid != null and bean.pid != '' ">
+				and vo.pid = #{bean.pid}
+			</if> 
+			<if test="bean.posid != null and bean.posid != '' ">
+				and vo.posid = #{bean.posid}
+			</if>
+				and vo.status = 1
+		</trim>
+		order by vo.pewid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findTopNewEqu" resultType="map">
+		select
+			eid,posid,logo,ename
+		from 
+			<include refid="Tb_table_name" />
+		where status=1
+		order by pewid desc
+		limit 3
+	</select>
+	
+	<select id="findByPosid" parameterType="String" resultMap="BaseResultMap2">
+		select
+			<include refid="Base_Column_List2" />,ct.catename
+		from 
+			<include refid="Tb_table_name" /> vo
+		left join tb_equipment_category ct on ct.cateid=vo.cateid
+		where vo.posid=#{posid}
+		order by vo.pewid desc
+		limit 1
+	</select>
+	
+	<select id="findEquByPosid" parameterType="String" resultType="map">
+		select
+			<include refid="Base_Column_List2" />,ct.catename,pr.sellerid
+		from 
+			<include refid="Tb_table_name" /> vo
+		left join tb_equipment_category ct on ct.cateid=vo.cateid	
+		left join tb_project pr on pr.pid=vo.pid	
+		where vo.posid=#{posid}
+		order by vo.pewid desc
+		limit 1
+	</select>
+	
+	<select id="findByPewid" parameterType="Long" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where pewid = #{pewid}
+	</select>
+	
+	<delete id="delByPewid" parameterType="Long">
+		delete from <include refid="Tb_table_name" />
+		where pewid = #{pewid}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.project.ProjectEquWater" useGeneratedKeys="true"
+		keyProperty="pewid">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="pewid != null">
+				pewid,
+			</if>
+			<if test="pid != null">
+				pid,
+			</if>
+			<if test="cateid != null">
+				cateid,
+			</if>
+			<if test="subcateid != null">
+				subcateid,
+			</if>
+			<if test="eid != null">
+				eid,
+			</if>
+			<if test="logo != null">
+				logo,
+			</if>
+			<if test="posid != null">
+				posid,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="pewid != null">
+				#{pewid},
+			</if>
+			<if test="pid != null">
+				#{pid},
+			</if>
+			<if test="cateid != null">
+				#{cateid},
+			</if>
+			<if test="subcateid != null">
+				#{subcateid},
+			</if>
+			<if test="eid != null">
+				#{eid},
+			</if>
+			<if test="logo != null">
+				#{logo},
+			</if>
+			<if test="posid != null">
+				#{posid},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPewid" parameterType="com.billz.xycode.model.project.ProjectEquWater">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="pid != null ">
+					pid = #{pid},
+				</if>
+				<if test="cateid != null ">
+					cateid = #{cateid},
+				</if>
+				<if test="subcateid != null ">
+					subcateid = #{subcateid},
+				</if>
+				<if test="eid != null ">
+					eid = #{eid},
+				</if>
+				<if test="posid != null ">
+					posid = #{posid},
+				</if>
+				<if test="status != null ">
+					status = #{status},
+				</if>
+			</set>
+		</trim>
+		where pewid = #{pewid}
+	</update>
+</mapper>

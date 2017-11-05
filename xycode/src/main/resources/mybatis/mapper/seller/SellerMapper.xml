@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.seller.SellerMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.seller.Seller">
+		<id property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="sellername" column="sellername" jdbcType="VARCHAR" />
+		<result property="sdm" column="sdm" jdbcType="VARCHAR" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="address" column="address" jdbcType="VARCHAR" />
+		<result property="telname" column="telname" jdbcType="VARCHAR" />
+		<result property="telphone" column="telphone" jdbcType="VARCHAR" />
+		<result property="wxshh" column="wxshh" jdbcType="VARCHAR" />
+		<result property="wxfl" column="wxfl" jdbcType="DOUBLE" />
+		<result property="wxgzh" column="wxgzh" jdbcType="VARCHAR" />
+		<result property="stype" column="stype" jdbcType="VARCHAR" />
+		<result property="parentid" column="parentid" jdbcType="BIGINT" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sellerid,sellername,sdm,logo,address,telname,telphone,wxshh,wxfl,wxgzh,stype,parentid,status,createtime
+	</sql>
+	<sql id="Tb_table_name">tb_seller</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.sellername != null and bean.sellername != '' ">
+				and sellername = #{bean.sellername}
+			</if> 
+			<if test="bean.address != null and bean.address != '' ">
+				and address = #{bean.address}
+			</if>
+			<if test="bean.telname != null and bean.telname != '' ">
+				and telname = #{bean.telname}
+			</if>
+			<if test="bean.telphone != null and bean.telphone != '' ">
+				and telphone = #{bean.telphone}
+			</if>
+			<if test="bean.wxshh != null and bean.wxshh != '' ">
+				and wxshh = #{bean.wxshh}
+			</if>
+			<if test="bean.wxgzh != null and bean.wxgzh != '' ">
+				and wxgzh = #{bean.wxgzh}
+			</if>
+			<if test="bean.stype != null and bean.stype != '' ">
+				and stype = #{bean.stype}
+			</if>
+			<if test="bean.parentid != null and bean.parentid != '' ">
+				and parentid = #{bean.parentid}
+			</if>
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if> 
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.sellername != null and bean.sellername != '' ">
+				and sellername = #{bean.sellername}
+			</if> 
+			<if test="bean.address != null and bean.address != '' ">
+				and address = #{bean.address}
+			</if>
+			<if test="bean.telname != null and bean.telname != '' ">
+				and telname = #{bean.telname}
+			</if>
+			<if test="bean.telphone != null and bean.telphone != '' ">
+				and telphone = #{bean.telphone}
+			</if>
+			<if test="bean.wxshh != null and bean.wxshh != '' ">
+				and wxshh = #{bean.wxshh}
+			</if>
+			<if test="bean.wxgzh != null and bean.wxgzh != '' ">
+				and wxgzh = #{bean.wxgzh}
+			</if>
+			<if test="bean.stype != null and bean.stype != '' ">
+				and stype = #{bean.stype}
+			</if>
+			<if test="bean.parentid != null and bean.parentid != '' ">
+				and parentid = #{bean.parentid}
+			</if>
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if>
+			<if test="bean.createtime != null and bean.createtime != '' ">
+				and createtime = #{bean.createtime}
+			</if>
+		</trim>
+		order by sellerid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findBySellerid" parameterType="Long" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where sellerid = #{sellerid}
+	</select>
+	
+	<delete id="delBySellerid" parameterType="Long">
+		delete from <include refid="Tb_table_name" />
+		where sellerid = #{sellerid}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.seller.Seller" useGeneratedKeys="true"
+		keyProperty="sellerid">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sellerid != null">
+				sellerid,
+			</if>
+			<if test="sellername != null">
+				sellername,
+			</if>
+			<if test="sdm != null">
+				sdm,
+			</if>
+			<if test="logo != null">
+				logo,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="telname != null">
+				telname,
+			</if>
+			<if test="telphone != null">
+				telphone,
+			</if>
+			<if test="wxshh != null">
+				wxshh,
+			</if>
+			<if test="wxfl != null">
+				wxfl,
+			</if>
+			<if test="wxgzh != null">
+				wxgzh,
+			</if>
+			<if test="stype != null">
+				stype,
+			</if>
+			<if test="parentid != null">
+				parentid,
+			</if>
+			<if test="status != null">
+				status,
+			</if> 
+				createtime, 
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sellerid != null">
+				#{sellerid},
+			</if>
+			<if test="sellername != null">
+				#{sellername},
+			</if>
+			<if test="sdm != null">
+				#{sdm},
+			</if>
+			<if test="logo != null">
+				#{logo},
+			</if>
+			<if test="address != null">
+				#{address},
+			</if>
+			<if test="telname != null">
+				#{telname},
+			</if>
+			<if test="telphone != null">
+				#{telphone},
+			</if>
+			<if test="wxshh != null">
+				#{wxshh},
+			</if>
+			<if test="wxfl != null">
+				#{wxfl},
+			</if>
+			<if test="wxgzh != null">
+				#{wxgzh},
+			</if>
+			<if test="stype != null">
+				#{stype},
+			</if>
+			<if test="parentid != null">
+				#{parentid},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+				now(),
+		</trim>
+	</insert>
+	
+	<update id="updateBySellerid" parameterType="com.billz.xycode.model.seller.Seller">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="sellername != null ">
+					sellername = #{sellername},
+				</if>
+				<if test="logo != null ">
+					logo = #{logo},
+				</if>
+				<if test="address != null ">
+					address = #{address},
+				</if>
+				<if test="telname != null ">
+					telname = #{telname},
+				</if>
+				<if test="telphone != null ">
+					telphone = #{telphone},
+				</if>
+				<if test="wxshh != null ">
+					wxshh = #{wxshh},
+				</if>
+				<if test="wxfl != null ">
+					wxfl = #{wxfl},
+				</if>
+				<if test="wxgzh != null ">
+					wxgzh = #{wxgzh},
+				</if>
+				<if test="stype != null ">
+					stype = #{stype},
+				</if>
+				<if test="parentid != null ">
+					parentid = #{parentid},
+				</if>
+				<if test="status != null ">
+					status = #{status},
+				</if> 
+			</set>
+		</trim>
+		where sellerid = #{sellerid}
+	</update>
+</mapper>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.seller.SellerWithdrawMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.seller.SellerWithdraw">
+		<id property="swid" column="swid" jdbcType="BIGINT" />
+		<result property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="said" column="said" jdbcType="INTEGER" />
+		<result property="money" column="money" jdbcType="DOUBLE" />
+		<result property="status" column="status" jdbcType="INTEGER" />
+		<result property="remark" column="remark" jdbcType="VARCHAR" />
+		<result property="wxshh" column="wxshh" jdbcType="VARCHAR" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.billz.xycode.model.seller.SellerWithdraw">
+		<id property="swid" column="swid" jdbcType="BIGINT" />
+		<result property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="sellername" column="sellername" jdbcType="VARCHAR" />
+		<result property="said" column="said" jdbcType="INTEGER" />
+		<result property="catename" column="catename" jdbcType="VARCHAR" />
+		<result property="money" column="money" jdbcType="DOUBLE" />
+		<result property="status" column="status" jdbcType="INTEGER" />
+		<result property="remark" column="remark" jdbcType="VARCHAR" />
+		<result property="wxshh" column="wxshh" jdbcType="VARCHAR" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		swid,sellerid,said,money,status,remark,wxshh,createtime
+	</sql>
+	<sql id="Base_Column_List2">
+		vo.swid,vo.sellerid,vo.said,vo.money,vo.status,vo.remark,vo.wxshh,vo.createtime,
+		se.sellername,cate.catename
+	</sql>
+	<sql id="Tb_table_name">tb_seller_withdraw</sql>
+
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.said != null and bean.said != '' ">
+				and said = #{bean.said}
+			</if>
+			<if test="bean.status != null ">
+				and status = #{bean.status}
+			</if>
+		</trim>
+	</select>
+
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap2">
+		select
+		<include refid="Base_Column_List2" />
+		from
+		<include refid="Tb_table_name" /> vo 
+		left join tb_seller se on se.sellerid=vo.sellerid
+		left join tb_equipment_category cate on cate.cateid=vo.said
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and vo.sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.said != null and bean.said != '' ">
+				and vo.said = #{bean.said}
+			</if>
+			<if test="bean.status != null ">
+				and vo.status = #{bean.status}
+			</if> 
+		</trim>
+		order by vo.swid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findPageCountBySellerid" parameterType="psb" resultType="Integer">
+		select count(1) from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.said != null and bean.said != '' ">
+				and said = #{bean.said}
+			</if>
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark = #{bean.remark}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findPageListBySellerid" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.said != null and bean.said != '' ">
+				and said = #{bean.said}
+			</if>
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark = #{bean.remark}
+			</if> 
+		</trim>
+		order by swid desc
+		limit #{start},#{end}
+	</select>
+
+	<select id="findBySwid" parameterType="Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		where swid = #{swid}
+	</select>
+
+	<delete id="delBySwid" parameterType="Long">
+		delete from
+		<include refid="Tb_table_name" />
+		where swid = #{swid}
+	</delete>
+
+	<insert id="insert" parameterType="com.billz.xycode.model.seller.SellerWithdraw"
+		useGeneratedKeys="true" keyProperty="swid">
+		insert into
+		<include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="swid != null">
+				swid,
+			</if>
+			<if test="sellerid != null">
+				sellerid,
+			</if>
+			<if test="said != null">
+				said,
+			</if>
+			<if test="money != null">
+				money,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="wxshh != null">
+				wxshh,
+			</if>
+			createtime,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="swid != null">
+				#{swid},
+			</if>
+			<if test="sellerid != null">
+				#{sellerid},
+			</if>
+			<if test="said != null">
+				#{said},
+			</if>
+			<if test="money != null">
+				#{money},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="wxshh != null">
+				#{wxshh},
+			</if>
+			now(),
+		</trim>
+	</insert>
+
+	<update id="updateBySwid" parameterType="com.billz.xycode.model.seller.SellerWithdraw">
+		update
+		<include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set>
+				<if test="sellerid != null ">
+					sellerid = #{sellerid},
+				</if>
+				<if test="said != null ">
+					said = #{said},
+				</if>
+				<if test="money != null ">
+					money = #{money},
+				</if>
+				<if test="status != null ">
+					status = #{status},
+				</if>
+				<if test="remark != null ">
+					remark = #{remark},
+				</if>
+				<if test="wxshh != null ">
+					wxshh = #{wxshh},
+				</if>
+			</set>
+		</trim>
+		where swid = #{swid}
+	</update>
+</mapper>

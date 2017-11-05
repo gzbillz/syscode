@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.project.ProjectSplitmoneySettingMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.project.ProjectSplitmoneySetting">
+		<id property="pssid" column="pssid" jdbcType="BIGINT" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="ruleid" column="ruleid" jdbcType="BIGINT" />
+		<result property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="isfz" column="isfz" jdbcType="BOOLEAN" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="com.billz.xycode.model.project.ProjectSplitmoneySetting">
+		<id property="pssid" column="pssid" jdbcType="BIGINT" />
+		<result property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="sellername" column="sellername" jdbcType="VARCHAR" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="pname" column="pname" jdbcType="VARCHAR" />
+		<result property="ruleid" column="ruleid" jdbcType="BIGINT" />
+		<result property="rno" column="rno" jdbcType="VARCHAR" />
+		<result property="isfz" column="isfz" jdbcType="BOOLEAN" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		pssid,pid,ruleid,sellerid,isfz
+	</sql>
+	<sql id="Base_Column_List2">
+		vo.pssid,vo.pid,vo.ruleid,vo.sellerid,vo.isfz,
+		se.sellername,pr.pname,rule.rno
+	</sql>
+	<sql id="Tb_table_name">tb_project_splitmoney_setting</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pid != null and bean.pid != '' ">
+				and pid = #{bean.pid}
+			</if>
+			<if test="bean.ruleid != null and bean.ruleid != '' ">
+				and ruleid = #{bean.ruleid}
+			</if>
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.isfz != null and bean.isfz != '' ">
+				and isfz = #{bean.isfz}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap2">
+		select
+			<include refid="Base_Column_List2" />
+		from <include refid="Tb_table_name" /> vo
+		left join tb_seller se on se.sellerid=vo.sellerid
+		left join tb_project pr on pr.pid=vo.pid
+		left join tb_splitmoney_rule rule on rule.ruleid=vo.ruleid
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.pid != null and bean.pid != '' ">
+				and vo.pid = #{bean.pid}
+			</if>
+			<if test="bean.ruleid != null and bean.ruleid != '' ">
+				and vo.ruleid = #{bean.ruleid}
+			</if>
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and vo.sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.isfz != null and bean.isfz != '' ">
+				and vo.isfz = #{bean.isfz}
+			</if>
+		</trim>
+		order by vo.pssid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findFzByPid" parameterType="Long" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where isfz=1 and pid = #{pid}
+	</select>
+	
+	<select id="findByPssid" parameterType="Long" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where pssid = #{pssid}
+	</select>
+	
+	<delete id="delByPssid" parameterType="Long">
+		delete from <include refid="Tb_table_name" />
+		where pssid = #{pssid}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.project.ProjectSplitmoneySetting" useGeneratedKeys="true"
+		keyProperty="pssid">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="pssid != null">
+				pssid,
+			</if>
+			<if test="pid != null">
+				pid,
+			</if>
+			<if test="ruleid != null">
+				ruleid,
+			</if>
+			<if test="sellerid != null">
+				sellerid,
+			</if>
+			<if test="isfz != null">
+				isfz,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="pssid != null">
+				#{pssid},
+			</if>
+			<if test="pid != null">
+				#{pid},
+			</if>
+			<if test="ruleid != null">
+				#{ruleid},
+			</if>
+			<if test="sellerid != null">
+				#{sellerid},
+			</if>
+			<if test="isfz != null">
+				#{isfz},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPssid" parameterType="com.billz.xycode.model.project.ProjectSplitmoneySetting">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="pid != null ">
+					pid = #{pid},
+				</if>
+				<if test="ruleid != null ">
+					ruleid = #{ruleid},
+				</if>
+				<if test="sellerid != null ">
+					sellerid = #{sellerid},
+				</if>
+				<if test="isfz != null ">
+					isfz = #{isfz},
+				</if>
+			</set>
+		</trim>
+		where pssid = #{pssid}
+	</update>
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.info.HelpMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.info.Help">
+		<id property="id" column="id" jdbcType="INTEGER" />
+		<result property="title" column="title" jdbcType="VARCHAR" />
+		<result property="content" column="content" jdbcType="VARCHAR" />
+		<result property="sn" column="sn" jdbcType="INTEGER" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,title,content,sn,createtime
+	</sql>
+	<sql id="Tb_table_name">tb_help</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.title != null and bean.title != '' ">
+				title like '%${bean.title}%' or content like '%${bean.title}%'
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.title != null and bean.title != '' ">
+				title like '%${bean.title}%' or content like '%${bean.title}%'
+			</if> 
+		</trim>
+		order by id desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findById" parameterType="Integer" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where id = #{id}
+	</select>
+	
+	<delete id="delById" parameterType="Integer">
+		delete from <include refid="Tb_table_name" />
+		where id = #{id}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.info.Help" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="sn != null">
+				sn,
+			</if>
+				createtime,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="title != null">
+				#{title},
+			</if>
+			<if test="content != null">
+				#{content},
+			</if>
+			<if test="sn != null">
+				#{sn},
+			</if>
+				now(),
+		</trim>
+	</insert>
+	
+	<update id="updateById" parameterType="com.billz.xycode.model.info.Help">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="title != null ">
+					title = #{title},
+				</if>
+				<if test="content != null ">
+					content = #{content},
+				</if>
+				<if test="sn != null ">
+					sn = #{sn},
+				</if>
+			</set>
+		</trim>
+		where id = #{id}
+	</update>
+</mapper>

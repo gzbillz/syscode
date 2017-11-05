@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.order.OrderConsumeMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.order.OrderConsume">
+		<id property="oid" column="oid" jdbcType="BIGINT" />
+		<result property="ordercode" column="ordercode" jdbcType="VARCHAR" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="title" column="title" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="INTEGER" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="eid" column="eid" jdbcType="BIGINT" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="uid" column="uid" jdbcType="BIGINT" />
+		<result property="userid" column="userid" jdbcType="VARCHAR" />
+		<result property="price" column="price" jdbcType="DOUBLE" />
+		<result property="fare" column="fare" jdbcType="DOUBLE" />
+		<result property="sellerid" column="sellerid" jdbcType="BIGINT" />
+		<result property="sycs" column="sycs" jdbcType="INTEGER" />
+		<result property="xfprice" column="xfprice" jdbcType="DOUBLE" />
+		<result property="bkprice" column="bkprice" jdbcType="DOUBLE" />
+		<result property="bktime" column="bktime" jdbcType="TIMESTAMP" />
+		<result property="qrcode" column="qrcode" jdbcType="VARCHAR" />
+		<result property="dkey" column="dkey" jdbcType="VARCHAR" />
+		<result property="itemid" column="itemid" jdbcType="BIGINT" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+		
+		<result property="paystatus" column="paystatus" jdbcType="INTEGER" />
+		<result property="paytime" column="paytime" jdbcType="TIMESTAMP" />
+		<result property="othercode" column="othercode" jdbcType="VARCHAR" />
+		<result property="paytype" column="paytype" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		oid,ordercode,logo,title,status,pid,eid,cateid,subcateid,posid,uid,userid,fare,price,sellerid,sycs,
+		xfprice,bkprice,bktime,qrcode,dkey,itemid,createtime,
+		paystatus,paytime,othercode,paytype
+	</sql>
+	<sql id="Tb_table_name">tb_order_consume</sql>
+
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.ordercode != null and bean.ordercode != '' ">
+				and ordercode = #{bean.ordercode}
+			</if>
+			<if test="bean.title != null and bean.title != '' ">
+				and title = #{bean.title}
+			</if>
+			<if test="bean.status != null ">
+				and status = #{bean.status}
+			</if>
+			<if test="bean.paystatus != null ">
+				and paystatus = #{bean.paystatus}
+			</if>
+			<if test="bean.pid != null and bean.pid != '' ">
+				and pid = #{bean.pid}
+			</if>
+			<if test="bean.eid != null and bean.eid != '' ">
+				and eid = #{bean.eid}
+			</if>
+			<if test="bean.cateid != null and bean.cateid != '' ">
+				and cateid = #{bean.cateid}
+			</if>
+			<if test="bean.subcateid != null and bean.subcateid != '' ">
+				and subcateid = #{bean.subcateid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if>
+			<if test="bean.uid != null and bean.uid != '' ">
+				and uid = #{bean.uid}
+			</if>
+			<if test="bean.userid != null and bean.userid != '' ">
+				and userid = #{bean.userid}
+			</if>
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.sycs != null and bean.sycs != '' ">
+				and sycs = #{bean.sycs}
+			</if>
+			<if test="bean.qrcode != null and bean.qrcode != '' ">
+				and qrcode = #{bean.qrcode}
+			</if>
+			<if test="bean.itemid != null and bean.itemid != '' ">
+				and itemid = #{bean.itemid}
+			</if>
+		</trim>
+	</select>
+
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.ordercode != null and bean.ordercode != '' ">
+				and ordercode = #{bean.ordercode}
+			</if>
+			<if test="bean.title != null and bean.title != '' ">
+				and title = #{bean.title}
+			</if>
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if>
+			<if test="bean.paystatus != null ">
+				and paystatus = #{bean.paystatus}
+			</if>
+			<if test="bean.pid != null and bean.pid != '' ">
+				and pid = #{bean.pid}
+			</if>
+			<if test="bean.eid != null and bean.eid != '' ">
+				and eid = #{bean.eid}
+			</if>
+			<if test="bean.cateid != null and bean.cateid != '' ">
+				and cateid = #{bean.cateid}
+			</if>
+			<if test="bean.subcateid != null and bean.subcateid != '' ">
+				and subcateid = #{bean.subcateid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if>
+			<if test="bean.uid != null and bean.uid != '' ">
+				and uid = #{bean.uid}
+			</if>
+			<if test="bean.userid != null and bean.userid != '' ">
+				and userid = #{bean.userid}
+			</if>
+			<if test="bean.sellerid != null and bean.sellerid != '' ">
+				and sellerid = #{bean.sellerid}
+			</if>
+			<if test="bean.sycs != null and bean.sycs != '' ">
+				and sycs = #{bean.sycs}
+			</if>
+			<if test="bean.qrcode != null and bean.qrcode != '' ">
+				and qrcode = #{bean.qrcode}
+			</if>
+			<if test="bean.itemid != null and bean.itemid != '' ">
+				and itemid = #{bean.itemid}
+			</if>
+		</trim>
+		order by oid desc
+		limit #{start},#{end}
+	</select>
+
+	<select id="findPageListByUid" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from
+			<include refid="Tb_table_name" />
+		where uid = #{bean.uid}
+		<if test="bean.status != null">
+			and status = #{bean.status}
+		</if>
+		<if test="bean.paystatus != null ">
+			and paystatus = #{bean.paystatus}
+		</if>
+			order by oid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findPageCountByUid" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		where uid = #{bean.uid}
+		<if test="bean.status != null">
+			and status = #{bean.status}
+		</if>
+		<if test="bean.paystatus != null ">
+			and paystatus = #{bean.paystatus}
+		</if>
+	</select>
+	
+	<select id="findPayStatusCountByUid" parameterType="map" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		where uid = #{uid}
+		<if test="paystatus != null">
+			and paystatus = #{paystatus}
+		</if>
+	</select>
+	
+	<select id="findStatusCountByUid" parameterType="map" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		where uid = #{uid} and paystatus=1
+		<if test="status != null">
+			and status = #{status}
+		</if>
+	</select>
+	
+	<select id="findByOid" parameterType="Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		where oid = #{oid}
+	</select>
+	
+	<select id="findByOrdercode" parameterType="String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		where ordercode = #{ordercode}
+	</select>
+	
+	<!-- 查询用户待确认的订单 -->
+	<select id="findUnokByUid" parameterType="map" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" />
+		where uid=#{uid} and paystatus=1 and paytime is not null and status=0 and posid=#{posid} and sycs=#{sycs}
+		<![CDATA[ and price>=#{bkprice}]]>
+		limit 1
+	</select>
+	
+	<delete id="delByOid" parameterType="Long">
+		delete from
+		<include refid="Tb_table_name" />
+		where oid = #{oid}
+	</delete>
+	
+	<delete id="delUnpayByOid" parameterType="Long">
+		delete from
+		<include refid="Tb_table_name" />
+		where (paystatus=0 or paystatus=null) and oid = #{oid}
+	</delete>
+
+	<insert id="insert" parameterType="com.billz.xycode.model.order.OrderConsume"
+		useGeneratedKeys="true" keyProperty="oid">
+		insert into
+		<include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				oid,
+			</if>
+			<if test="ordercode != null">
+				ordercode,
+			</if>
+			<if test="logo != null">
+				logo,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="pid != null">
+				pid,
+			</if>
+			<if test="eid != null">
+				eid,
+			</if>
+			<if test="cateid != null">
+				cateid,
+			</if>
+			<if test="subcateid != null">
+				subcateid,
+			</if>
+			<if test="posid != null">
+				posid,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="userid != null">
+				userid,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="fare != null">
+				fare,
+			</if>
+			<if test="sellerid != null">
+				sellerid,
+			</if>
+			<if test="sycs != null">
+				sycs,
+			</if>
+			<if test="xfprice != null">
+				xfprice,
+			</if>
+			<if test="bkprice != null">
+				bkprice,
+			</if>
+			<if test="bktime != null">
+				bktime,
+			</if>
+			<if test="qrcode != null">
+				qrcode,
+			</if>
+			<if test="dkey != null">
+				dkey,
+			</if>
+			<if test="itemid != null">
+				itemid,
+			</if> 
+				createtime,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				#{oid},
+			</if>
+			<if test="ordercode != null">
+				#{ordercode},
+			</if>
+			<if test="logo != null">
+				#{logo},
+			</if>
+			<if test="title != null">
+				#{title},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="pid != null">
+				#{pid},
+			</if>
+			<if test="eid != null">
+				#{eid},
+			</if>
+			<if test="cateid != null">
+				#{cateid},
+			</if>
+			<if test="subcateid != null">
+				#{subcateid},
+			</if>
+			<if test="posid != null">
+				#{posid},
+			</if>
+			<if test="uid != null">
+				#{uid},
+			</if>
+			<if test="userid != null">
+				#{userid},
+			</if>
+			<if test="price != null">
+				#{price},
+			</if>
+			<if test="fare != null">
+				#{fare},
+			</if>
+			<if test="sellerid != null">
+				#{sellerid},
+			</if>
+			<if test="sycs != null">
+				#{sycs},
+			</if>
+			<if test="xfprice != null">
+				#{xfprice},
+			</if>
+			<if test="bkprice != null">
+				#{bkprice},
+			</if>
+			<if test="bktime != null">
+				#{bktime},
+			</if>
+			<if test="qrcode != null">
+				#{qrcode},
+			</if>
+			<if test="dkey != null">
+				#{dkey},
+			</if>
+			<if test="itemid != null">
+				#{itemid},
+			</if>
+				now(),
+		</trim>
+	</insert>
+	
+	<update id="updateStatusByOid" parameterType="map">
+		update 
+		<include refid="Tb_table_name" />
+		set status=1,bktime=now(),bkprice=#{bkprice},xfprice=#{xfprice}
+		where status=0 and oid=#{oid}
+	</update>
+	
+	<update id="updatePaySuccessByOid" parameterType="map">
+		update 
+		<include refid="Tb_table_name" />
+		set paystatus=1,paytime=now(),paytype=#{paytype}
+		<if test="othercode != null and othercode != '' ">
+		,othercode=#{othercode}		
+		</if>
+		where status=0 and oid=#{oid}
+	</update>
+
+	<update id="updateByOid" parameterType="com.billz.xycode.model.order.OrderConsume">
+		update
+		<include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set>
+				<if test="ordercode != null ">
+					ordercode = #{ordercode},
+				</if>
+				<if test="title != null ">
+					title = #{title},
+				</if>
+				<if test="status != null ">
+					status = #{status},
+				</if>
+				<if test="pid != null ">
+					pid = #{pid},
+				</if>
+				<if test="eid != null ">
+					eid = #{eid},
+				</if>
+				<if test="cateid != null ">
+					cateid = #{cateid},
+				</if>
+				<if test="subcateid != null ">
+					subcateid = #{subcateid},
+				</if>
+				<if test="posid != null ">
+					posid = #{posid},
+				</if>
+				<if test="uid != null ">
+					uid = #{uid},
+				</if>
+				<if test="userid != null ">
+					userid = #{userid},
+				</if>
+				<if test="price != null ">
+					price = #{price},
+				</if>
+				<if test="fare != null ">
+					fare = #{fare},
+				</if>
+				<if test="sellerid != null ">
+					sellerid = #{sellerid},
+				</if>
+				<if test="sycs != null ">
+					sycs = #{sycs},
+				</if>
+				<if test="xfprice != null ">
+					xfprice = #{xfprice},
+				</if>
+				<if test="bkprice != null ">
+					bkprice = #{bkprice},
+				</if>
+				<if test="bktime != null ">
+					bktime = #{bktime},
+				</if>
+				<if test="qrcode != null ">
+					qrcode = #{qrcode},
+				</if>
+				<if test="dkey != null ">
+					dkey = #{dkey},
+				</if>
+				<if test="itemid != null ">
+					itemid = #{itemid},
+				</if>
+			</set>
+		</trim>
+		where oid = #{oid}
+	</update>
+</mapper>

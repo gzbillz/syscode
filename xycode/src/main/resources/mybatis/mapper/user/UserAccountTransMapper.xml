@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.user.UserAccountTransMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.user.UserAccountTrans">
+		<id property="tid" column="tid" jdbcType="BIGINT" />
+		<result property="ttype" column="ttype" jdbcType="BOOLEAN" />
+		<result property="fromuid" column="fromuid" jdbcType="BIGINT" />
+		<result property="fname" column="fname" jdbcType="VARCHAR" />
+		<result property="touid" column="touid" jdbcType="BIGINT" />
+		<result property="tname" column="tname" jdbcType="VARCHAR" />
+		<result property="remark" column="remark" jdbcType="INTEGER" />
+		<result property="price" column="price" jdbcType="DOUBLE" />
+		<result property="bprice" column="bprice" jdbcType="DOUBLE" />
+		<result property="aprice" column="aprice" jdbcType="DOUBLE" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		tid,ttype,fromuid,fname,touid,tname,remark,createtime,price,bprice,aprice
+	</sql>
+	<sql id="Tb_table_name">tb_user_account_trans</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.ttype != null and bean.ttype != '' ">
+				and ttype = #{bean.ttype}
+			</if>
+			<if test="bean.fromuid != null and bean.fromuid != '' ">
+				and fromuid = #{bean.fromuid}
+			</if>
+			<if test="bean.fname != null and bean.fname != '' ">
+				and fname = #{bean.fname}
+			</if>
+			<if test="bean.touid != null and bean.touid != '' ">
+				and touid = #{bean.touid}
+			</if>
+			<if test="bean.tname != null and bean.tname != '' ">
+				and tname = #{bean.tname}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark = #{bean.remark}
+			</if> 
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.ttype != null and bean.ttype != '' ">
+				and ttype = #{bean.ttype}
+			</if>
+			<if test="bean.fromuid != null and bean.fromuid != '' ">
+				and fromuid = #{bean.fromuid}
+			</if>
+			<if test="bean.fname != null and bean.fname != '' ">
+				and fname = #{bean.fname}
+			</if>
+			<if test="bean.touid != null and bean.touid != '' ">
+				and touid = #{bean.touid}
+			</if>
+			<if test="bean.tname != null and bean.tname != '' ">
+				and tname = #{bean.tname}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark = #{bean.remark}
+			</if> 
+		</trim>
+		order by tid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findByTid" parameterType="Long" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where tid = #{tid}
+	</select>
+	
+	<delete id="delByTid" parameterType="Long">
+		delete from <include refid="Tb_table_name" />
+		where tid = #{tid}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.user.UserAccountTrans" useGeneratedKeys="true"
+		keyProperty="tid">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="tid != null">
+				tid,
+			</if>
+			<if test="ttype != null">
+				ttype,
+			</if>
+			<if test="fromuid != null">
+				fromuid,
+			</if>
+			<if test="fname != null">
+				fname,
+			</if>
+			<if test="touid != null">
+				touid,
+			</if>
+			<if test="tname != null">
+				tname,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="price != null">
+				price,
+			</if> 
+			<if test="bprice != null">
+				bprice,
+			</if> 
+			<if test="aprice != null">
+				aprice,
+			</if> 
+				createtime,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="tid != null">
+				#{tid},
+			</if>
+			<if test="ttype != null">
+				#{ttype},
+			</if>
+			<if test="fromuid != null">
+				#{fromuid},
+			</if>
+			<if test="fname != null">
+				#{fname},
+			</if>
+			<if test="touid != null">
+				#{touid},
+			</if>
+			<if test="tname != null">
+				#{tname},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="price != null">
+				#{price},
+			</if>
+			<if test="bprice != null">
+				#{bprice},
+			</if>
+			<if test="aprice != null">
+				#{aprice},
+			</if>
+				now(),
+		</trim>
+	</insert>
+	
+	<update id="updateByTid" parameterType="com.billz.xycode.model.user.UserAccountTrans">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="ttype != null ">
+					ttype = #{ttype},
+				</if>
+				<if test="fromuid != null ">
+					fromuid = #{fromuid},
+				</if>
+				<if test="fname != null ">
+					fname = #{fname},
+				</if>
+				<if test="touid != null ">
+					touid = #{touid},
+				</if>
+				<if test="tname != null ">
+					tname = #{tname},
+				</if>
+				<if test="remark != null ">
+					remark = #{remark},
+				</if>
+				<if test="price != null ">
+					price = #{price},
+				</if>
+				<if test="bprice != null ">
+					bprice = #{bprice},
+				</if>
+				<if test="aprice != null ">
+					aprice = #{aprice},
+				</if>
+			</set>
+		</trim>
+		where tid = #{tid}
+	</update>
+</mapper>

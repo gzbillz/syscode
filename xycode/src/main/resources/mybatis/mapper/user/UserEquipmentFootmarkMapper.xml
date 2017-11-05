@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.user.UserEquipmentFootmarkMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.user.UserEquipmentFootmark">
+		<id property="fmid" column="fmid" jdbcType="BIGINT" />
+		<result property="uid" column="uid" jdbcType="BIGINT" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="pname" column="pname" jdbcType="VARCHAR" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="ucount" column="ucount" jdbcType="INTEGER" />
+		<result property="usedate" column="usedate" jdbcType="TIMESTAMP" />
+	</resultMap>
+ 	
+ 	<resultMap id="BaseResultMap2" type="com.billz.xycode.model.user.UserEquipmentFootmark">
+		<id property="fmid" column="fmid" jdbcType="BIGINT" />
+		<result property="uid" column="uid" jdbcType="BIGINT" />
+		<result property="cateid" column="cateid" jdbcType="INTEGER" />
+		<result property="catename" column="catename" jdbcType="VARCHAR" />
+		<result property="subcateid" column="subcateid" jdbcType="INTEGER" />
+		<result property="pid" column="pid" jdbcType="BIGINT" />
+		<result property="logo" column="logo" jdbcType="VARCHAR" />
+		<result property="posid" column="posid" jdbcType="VARCHAR" />
+		<result property="pname" column="pname" jdbcType="VARCHAR" />
+		<result property="ucount" column="ucount" jdbcType="INTEGER" />
+		<result property="usedate" column="usedate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		fmid,uid,cateid,subcateid,pid,pname,logo,posid,ucount,usedate
+	</sql>
+	<sql id="Base_Column_List2">
+		vo.fmid,vo.uid,vo.cateid,vo.subcateid,vo.pid,vo.pname,vo.logo,vo.posid,vo.ucount,vo.usedate
+	</sql>
+	<sql id="Tb_table_name">tb_user_equipment_footmark</sql>
+
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.uid != null and bean.uid != '' ">
+				and uid = #{bean.uid}
+			</if>
+			<if test="bean.cateid != null and bean.cateid != '' ">
+				and cateid = #{bean.cateid}
+			</if>
+			<if test="bean.subcateid != null and bean.subcateid != '' ">
+				and subcateid = #{bean.subcateid}
+			</if>
+			<if test="bean.pid != null and bean.pid != '' ">
+				and pid = #{bean.pid}
+			</if>
+			<if test="bean.pname != null and bean.pname != '' ">
+				and pname = #{bean.pname}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if>
+			<if test="bean.ucount != null and bean.ucount != '' ">
+				and ucount = #{bean.ucount}
+			</if>
+			<if test="bean.usedate != null and bean.usedate != '' ">
+				and usedate = #{bean.usedate}
+			</if>
+		</trim>
+	</select>
+
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.uid != null and bean.uid != '' ">
+				and uid = #{bean.uid}
+			</if>
+			<if test="bean.cateid != null and bean.cateid != '' ">
+				and cateid = #{bean.cateid}
+			</if>
+			<if test="bean.subcateid != null and bean.subcateid != '' ">
+				and subcateid = #{bean.subcateid}
+			</if>
+			<if test="bean.pid != null and bean.pid != '' ">
+				and pid = #{bean.pid}
+			</if>
+			<if test="bean.pname != null and bean.pname != '' ">
+				and pname = #{bean.pname}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if>
+			<if test="bean.ucount != null and bean.ucount != '' ">
+				and ucount = #{bean.ucount}
+			</if>
+			<if test="bean.usedate != null and bean.usedate != '' ">
+				and usedate = #{bean.usedate}
+			</if>
+		</trim>
+		order by fmid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findPageCountByUid" parameterType="psb" resultType="Integer">
+		select count(1) from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.uid != null and bean.uid != '' ">
+				and uid = #{bean.uid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and posid = #{bean.posid}
+			</if>
+			<if test="bean.pname != null and bean.pname != '' ">
+				and pname = #{bean.pname}
+			</if> 
+		</trim>
+	</select>
+	
+	<select id="findPageListByUid" parameterType="psb" resultMap="BaseResultMap2">
+		select
+			<include refid="Base_Column_List2" />,ct.catename
+		from <include refid="Tb_table_name" /> vo
+		left join tb_equipment_category ct on ct.cateid=vo.cateid
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.uid != null and bean.uid != '' ">
+				and vo.uid = #{bean.uid}
+			</if>
+			<if test="bean.posid != null and bean.posid != '' ">
+				and vo.posid = #{bean.posid}
+			</if>
+			<if test="bean.pname != null and bean.pname != '' ">
+				and vo.pname = #{bean.pname}
+			</if> 
+		</trim>
+		order by vo.fmid desc
+		limit #{start},#{end}
+	</select>
+
+	<select id="findTopNewByUid" parameterType="Long" resultType="map">
+		select
+			<include refid="Base_Column_List" />
+		from
+			<include refid="Tb_table_name" />
+		where uid = #{uid}
+		order by usedate desc,ucount desc
+		limit 2
+	</select>
+	
+	<select id="findByFmid" parameterType="Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		where fmid = #{fmid}
+	</select>
+	
+	<select id="findFmidByUidAndPidAndPosid" parameterType="map" resultType="long">
+		select fmid from <include refid="Tb_table_name" />
+		where uid = #{uid} and pid=#{pid} and posid=#{posid}
+		limit 1
+	</select>
+
+	<delete id="delByFmid" parameterType="Long">
+		delete from
+		<include refid="Tb_table_name" />
+		where fmid = #{fmid}
+	</delete>
+
+	<delete id="delByFmids" parameterType="String">
+		delete from
+		<include refid="Tb_table_name" />
+		where fmid in ('${fmids}')
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.user.UserEquipmentFootmark"
+		useGeneratedKeys="true" keyProperty="fmid">
+		insert into
+		<include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fmid != null">
+				fmid,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="cateid != null">
+				cateid,
+			</if>
+			<if test="subcateid != null">
+				subcateid,
+			</if>
+			<if test="pid != null">
+				pid,
+			</if>
+			<if test="pname != null">
+				pname,
+			</if>
+			<if test="logo != null">
+				logo,
+			</if>
+			<if test="posid != null">
+				posid,
+			</if>
+			<if test="ucount != null">
+				ucount,
+			</if> 
+				usedate,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fmid != null">
+				#{fmid},
+			</if>
+			<if test="uid != null">
+				#{uid},
+			</if>
+			<if test="cateid != null">
+				#{cateid},
+			</if>
+			<if test="subcateid != null">
+				#{subcateid},
+			</if>
+			<if test="pid != null">
+				#{pid},
+			</if>
+			<if test="pname != null">
+				#{pname},
+			</if>
+			<if test="logo != null">
+				#{logo},
+			</if>
+			<if test="posid != null">
+				#{posid},
+			</if>
+			<if test="ucount != null">
+				#{ucount},
+			</if>
+				now(),
+		</trim>
+	</insert>
+
+	<update id="updateByFmid" parameterType="com.billz.xycode.model.user.UserEquipmentFootmark">
+		update
+		<include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set>
+				<if test="uid != null ">
+					uid = #{uid},
+				</if>
+				<if test="cateid != null ">
+					cateid = #{cateid},
+				</if>
+				<if test="subcateid != null ">
+					subcateid = #{subcateid},
+				</if>
+				<if test="pid != null ">
+					pid = #{pid},
+				</if>
+				<if test="pname != null ">
+					pname = #{pname},
+				</if>
+				<if test="logo != null ">
+					logo = #{logo},
+				</if>
+				<if test="posid != null ">
+					posid = #{posid},
+				</if>
+				<if test="ucount != null ">
+					ucount = #{ucount},
+				</if>
+					usedate = now(),
+			</set>
+		</trim>
+		where fmid = #{fmid}
+	</update>
+	
+	<update id="updateUcountByFmid" parameterType="Long">
+		update
+		<include refid="Tb_table_name" />
+		set ucount = ucount+1,usedate=now()
+		where fmid = #{fmid}
+	</update>
+</mapper>

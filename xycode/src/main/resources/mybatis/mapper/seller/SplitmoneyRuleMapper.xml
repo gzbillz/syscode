@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.xycode.dao.seller.SplitmoneyRuleMapper">
+	<resultMap id="BaseResultMap" type="com.billz.xycode.model.seller.SplitmoneyRule">
+		<id property="ruleid" column="ruleid" jdbcType="BIGINT" />
+		<result property="rno" column="rno" jdbcType="VARCHAR" />
+		<result property="remark" column="remark" jdbcType="VARCHAR" />
+		<result property="content" column="content" jdbcType="VARCHAR" />
+		<result property="funname" column="funname" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ruleid,rno,remark,content,funname,status,createtime
+	</sql>
+	<sql id="Tb_table_name">tb_splitmoney_rule</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.rno != null and bean.rno != '' ">
+				and rno = #{bean.rno}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark like '%${bean.remark}%'
+			</if>
+			<if test="bean.content != null and bean.content != '' ">
+				and content = #{bean.content}
+			</if>
+			<if test="bean.funname != null and bean.funname != '' ">
+				and funname = #{bean.funname}
+			</if>
+			<if test="bean.status != null ">
+				and status = #{bean.status}
+			</if> 
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.rno != null and bean.rno != '' ">
+				and rno = #{bean.rno}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark like '%${bean.remark}%'
+			</if>
+			<if test="bean.content != null and bean.content != '' ">
+				and content = #{bean.content}
+			</if>
+			<if test="bean.funname != null and bean.funname != '' ">
+				and funname = #{bean.funname}
+			</if>
+			<if test="bean.status != null ">
+				and status = #{bean.status}
+			</if> 
+		</trim>
+		order by ruleid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findByRuleid" parameterType="Long" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where ruleid = #{ruleid}
+	</select>
+	
+	<delete id="delByRuleid" parameterType="Long">
+		delete from <include refid="Tb_table_name" />
+		where ruleid = #{ruleid}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.xycode.model.seller.SplitmoneyRule" useGeneratedKeys="true"
+		keyProperty="ruleid">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ruleid != null">
+				ruleid,
+			</if>
+			<if test="rno != null">
+				rno,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="funname != null">
+				funname,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+				createtime, 
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ruleid != null">
+				#{ruleid},
+			</if>
+			<if test="rno != null">
+				#{rno},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="content != null">
+				#{content},
+			</if>
+			<if test="funname != null">
+				#{funname},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+				now(),
+		</trim>
+	</insert>
+	
+	<update id="updateByRuleid" parameterType="com.billz.xycode.model.seller.SplitmoneyRule">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="rno != null ">
+					rno = #{rno},
+				</if>
+				<if test="remark != null ">
+					remark = #{remark},
+				</if>
+				<if test="content != null ">
+					content = #{content},
+				</if>
+				<if test="funname != null ">
+					funname = #{funname},
+				</if>
+				<if test="status != null ">
+					status = #{status},
+				</if>
+			</set>
+		</trim>
+		where ruleid = #{ruleid}
+	</update>
+</mapper>
