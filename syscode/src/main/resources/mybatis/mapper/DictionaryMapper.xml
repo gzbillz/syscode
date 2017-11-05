@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.sys.dao.DictionaryMapper">
+	<resultMap id="BaseResultMap" type="com.billz.sys.model.Dictionary">
+		<id property="id" column="id" jdbcType="INTEGER" />
+		<result property="gno" column="gno" jdbcType="VARCHAR" />
+		<result property="ky" column="ky" jdbcType="VARCHAR" />
+		<result property="val" column="val" jdbcType="VARCHAR" />
+		<result property="sn" column="sn" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,gno,ky,val,sn
+	</sql>
+	<sql id="Tb_table_name">sys_dictionary</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.gno != null and bean.gno != '' ">
+				and gno = #{bean.gno}
+			</if>
+			<if test="bean.ky != null and bean.ky != '' ">
+				and ky = #{bean.ky}
+			</if>
+			<if test="bean.val != null and bean.val != '' ">
+				and val = #{bean.val}
+			</if>
+			<if test="bean.sn != null and bean.sn != '' ">
+				and sn = #{bean.sn}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.gno != null and bean.gno != '' ">
+				and gno = #{bean.gno}
+			</if>
+			<if test="bean.ky != null and bean.ky != '' ">
+				and ky = #{bean.ky}
+			</if>
+			<if test="bean.val != null and bean.val != '' ">
+				and val = #{bean.val}
+			</if>
+			<if test="bean.sn != null and bean.sn != '' ">
+				and sn = #{bean.sn}
+			</if>
+		</trim>
+		order by id desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findById" parameterType="Integer" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where id = #{id}
+	</select>
+	
+	<delete id="delById" parameterType="Integer">
+		delete from <include refid="Tb_table_name" />
+		where id = #{id}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.sys.model.Dictionary" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="gno != null">
+				gno,
+			</if>
+			<if test="ky != null">
+				ky,
+			</if>
+			<if test="val != null">
+				val,
+			</if>
+			<if test="sn != null">
+				sn,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="gno != null">
+				#{gno},
+			</if>
+			<if test="ky != null">
+				#{ky},
+			</if>
+			<if test="val != null">
+				#{val},
+			</if>
+			<if test="sn != null">
+				#{sn},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateById" parameterType="com.billz.sys.model.Dictionary">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="gno != null ">
+					gno = #{gno},
+				</if>
+				<if test="ky != null ">
+					ky = #{ky},
+				</if>
+				<if test="val != null ">
+					val = #{val},
+				</if>
+				<if test="sn != null ">
+					sn = #{sn},
+				</if>
+			</set>
+		</trim>
+		where id = #{id}
+	</update>
+</mapper>

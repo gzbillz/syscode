@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.sys.dao.SysMenuMapper">
+	<resultMap id="BaseResultMap" type="com.billz.sys.model.SysMenu">
+		<id property="menuid" column="menuid" jdbcType="INTEGER" />
+		<result property="icon" column="icon" jdbcType="VARCHAR" />
+		<result property="mkey" column="mkey" jdbcType="VARCHAR" />
+		<result property="menuname" column="menuname" jdbcType="VARCHAR" />
+		<result property="url" column="url" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="BOOLEAN" />
+		<result property="cj" column="cj" jdbcType="INTEGER" />
+		<result property="sn" column="sn" jdbcType="INTEGER" />
+		<result property="parentid" column="parentid" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		menuid,icon,mkey,menuname,url,status,cj,sn,parentid
+	</sql>
+	<sql id="Tb_table_name">sys_menu</sql>
+	
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from <include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.mkey != null and bean.mkey != '' ">
+				and mkey = #{bean.mkey}
+			</if>
+			<if test="bean.menuname != null and bean.menuname != '' ">
+				and menuname like '%${bean.menuname}%'
+			</if> 
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if>
+			<if test="bean.cj != null and bean.cj != '' ">
+				and cj = #{bean.cj}
+			</if>
+			<if test="bean.sn != null and bean.sn != '' ">
+				and sn = #{bean.sn}
+			</if>
+			<if test="bean.parentid != null and bean.parentid != '' ">
+				and parentid = #{bean.parentid}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from <include refid="Tb_table_name" /> 
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.mkey != null and bean.mkey != '' ">
+				and mkey = #{bean.mkey}
+			</if>
+			<if test="bean.menuname != null and bean.menuname != '' ">
+				and menuname like '%${bean.menuname}%'
+			</if> 
+			<if test="bean.status != null and bean.status != '' ">
+				and status = #{bean.status}
+			</if>
+			<if test="bean.cj != null and bean.cj != '' ">
+				and cj = #{bean.cj}
+			</if>
+			<if test="bean.sn != null and bean.sn != '' ">
+				and sn = #{bean.sn}
+			</if>
+			<if test="bean.parentid != null and bean.parentid != '' ">
+				and parentid = #{bean.parentid}
+			</if>
+		</trim>
+		order by menuid desc
+		limit #{start},#{end}
+	</select>
+	
+	<select id="findByMenuid" parameterType="Integer" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			<include refid="Tb_table_name" />
+		where menuid = #{menuid}
+	</select>
+	
+	<delete id="delByMenuid" parameterType="Integer">
+		delete from <include refid="Tb_table_name" />
+		where menuid = #{menuid}
+	</delete>
+	
+	<insert id="insert" parameterType="com.billz.sys.model.SysMenu" useGeneratedKeys="true"
+		keyProperty="menuid">
+		insert into <include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="menuid != null">
+				menuid,
+			</if>
+			<if test="icon != null">
+				icon,
+			</if>
+			<if test="mkey != null">
+				mkey,
+			</if>
+			<if test="menuname != null">
+				menuname,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="cj != null">
+				cj,
+			</if>
+			<if test="sn != null">
+				sn,
+			</if>
+			<if test="parentid != null">
+				parentid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="menuid != null">
+				#{menuid},
+			</if>
+			<if test="icon != null">
+				#{icon},
+			</if>
+			<if test="mkey != null">
+				#{mkey},
+			</if>
+			<if test="menuname != null">
+				#{menuname},
+			</if>
+			<if test="url != null">
+				#{url},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="cj != null">
+				#{cj},
+			</if>
+			<if test="sn != null">
+				#{sn},
+			</if>
+			<if test="parentid != null">
+				#{parentid},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByMenuid" parameterType="com.billz.sys.model.SysMenu">
+		update <include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set> 
+				<if test="icon != null ">
+					icon = #{icon},
+				</if>
+				<if test="mkey != null ">
+					mkey = #{mkey},
+				</if>
+				<if test="menuname != null ">
+					menuname = #{menuname},
+				</if>
+				<if test="url != null ">
+					url = #{url},
+				</if>
+				<if test="status != null ">
+					status = #{status},
+				</if>
+				<if test="cj != null ">
+					cj = #{cj},
+				</if>
+				<if test="sn != null ">
+					sn = #{sn},
+				</if>
+				<if test="parentid != null ">
+					parentid = #{parentid},
+				</if>
+			</set>
+		</trim>
+		where menuid = #{menuid}
+	</update>
+</mapper>

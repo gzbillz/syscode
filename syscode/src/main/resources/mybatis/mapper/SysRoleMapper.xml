@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.sys.dao.SysRoleMapper">
+	<resultMap id="BaseResultMap" type="com.billz.sys.model.SysRole">
+		<id property="roleid" column="roleid" jdbcType="BIGINT" />
+		<result property="rolename" column="rolename" jdbcType="VARCHAR" />
+		<result property="remark" column="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		roleid,rolename,remark
+	</sql>
+	<sql id="Tb_table_name">sys_role</sql>
+
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.rolename != null and bean.rolename != '' ">
+				and rolename = #{bean.rolename}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark like '%${bean.remark}%'
+			</if>
+		</trim>
+	</select>
+
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.rolename != null and bean.rolename != '' ">
+				and rolename = #{bean.rolename}
+			</if>
+			<if test="bean.remark != null and bean.remark != '' ">
+				and remark like '%${bean.remark}%'
+			</if>
+		</trim>
+		order by roleid desc
+		limit #{start},#{end}
+	</select>
+
+	<select id="findByRoleid" parameterType="Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		where roleid = #{roleid}
+	</select>
+
+	<delete id="delByRoleid" parameterType="Long">
+		delete from
+		<include refid="Tb_table_name" />
+		where roleid = #{roleid}
+	</delete>
+
+	<insert id="insert" parameterType="com.billz.sys.model.SysRole"
+		useGeneratedKeys="true" keyProperty="roleid">
+		insert into
+		<include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleid != null">
+				roleid,
+			</if>
+			<if test="rolename != null">
+				rolename,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleid != null">
+				#{roleid},
+			</if>
+			<if test="rolename != null">
+				#{rolename},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByRoleid" parameterType="com.billz.sys.model.SysRole">
+		update
+		<include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set>
+				<if test="rolename != null ">
+					rolename = #{rolename},
+				</if>
+				<if test="remark != null ">
+					remark = #{remark},
+				</if>
+			</set>
+		</trim>
+		where roleid = #{roleid}
+	</update>
+</mapper>

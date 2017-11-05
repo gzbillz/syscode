@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billz.sys.dao.SysMenuOptMapper">
+	<resultMap id="BaseResultMap" type="com.billz.sys.model.SysMenuOpt">
+		<id property="optid" column="optid" jdbcType="INTEGER" />
+		<result property="oname" column="oname" jdbcType="VARCHAR" />
+		<result property="okey" column="okey" jdbcType="VARCHAR" />
+		<result property="menuid" column="menuid" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		optid,oname,okey,menuid
+	</sql>
+	<sql id="Tb_table_name">sys_menu_opt</sql>
+
+	<select id="findPageCount" parameterType="psb" resultType="Integer">
+		select count(1) from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.oname != null and bean.oname != '' ">
+				and oname = #{bean.oname}
+			</if>
+			<if test="bean.okey != null and bean.okey != '' ">
+				and okey = #{bean.okey}
+			</if>
+			<if test="bean.menuid != null and bean.menuid != '' ">
+				and menuid = #{bean.menuid}
+			</if>
+		</trim>
+	</select>
+
+	<select id="findPageList" parameterType="psb" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="bean.oname != null and bean.oname != '' ">
+				and oname = #{bean.oname}
+			</if>
+			<if test="bean.okey != null and bean.okey != '' ">
+				and okey = #{bean.okey}
+			</if>
+			<if test="bean.menuid != null and bean.menuid != '' ">
+				and menuid = #{bean.menuid}
+			</if>
+		</trim>
+		order by optid desc
+		limit #{start},#{end}
+	</select>
+
+	<select id="findByOptid" parameterType="Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Tb_table_name" />
+		where optid = #{optid}
+	</select>
+
+	<delete id="delByOptid" parameterType="Integer">
+		delete from
+		<include refid="Tb_table_name" />
+		where optid = #{optid}
+	</delete>
+
+	<insert id="insert" parameterType="com.billz.sys.model.SysMenuOpt"
+		useGeneratedKeys="true" keyProperty="optid">
+		insert into
+		<include refid="Tb_table_name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="optid != null">
+				optid,
+			</if>
+			<if test="oname != null">
+				oname,
+			</if>
+			<if test="okey != null">
+				okey,
+			</if>
+			<if test="menuid != null">
+				menuid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="optid != null">
+				#{optid},
+			</if>
+			<if test="oname != null">
+				#{oname},
+			</if>
+			<if test="okey != null">
+				#{okey},
+			</if>
+			<if test="menuid != null">
+				#{menuid},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByOptid" parameterType="com.billz.sys.model.SysMenuOpt">
+		update
+		<include refid="Tb_table_name" />
+		<trim suffixOverrides=",">
+			<set>
+				<if test="oname != null ">
+					oname = #{oname},
+				</if>
+				<if test="okey != null ">
+					okey = #{okey},
+				</if>
+				<if test="menuid != null ">
+					menuid = #{menuid},
+				</if>
+			</set>
+		</trim>
+		where optid = #{optid}
+	</update>
+</mapper>
